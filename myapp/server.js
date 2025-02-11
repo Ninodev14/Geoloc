@@ -433,26 +433,21 @@ app.post(
     try {
       const geocacheId = req.params.id;
       const { password } = req.body;
-
-      // Récupérer la géocache
       const geocache = await Geocache.findById(geocacheId);
       if (!geocache) {
         return res.status(404).json({ error: "Géocache non trouvée" });
       }
 
-      // Vérifier si un mot de passe est défini
       if (!geocache.password) {
         return res
           .status(400)
           .json({ error: "Aucun mot de passe requis pour cette géocache" });
       }
 
-      // Comparer le mot de passe fourni avec celui enregistré
       if (password !== geocache.password) {
         return res.status(400).json({ error: "Mot de passe incorrect" });
       }
 
-      // Si le mot de passe est correct
       res.json({ message: "Mot de passe validé, géocache vue avec succès" });
     } catch (error) {
       res
@@ -462,8 +457,52 @@ app.post(
   }
 );
 
-const { ObjectId } = require("mongodb");
-
+/**
+ * @openapi
+ * /geocache/{id}:
+ *   put:
+ *     summary: Mettre à jour une géocache
+ *     description: Permet de modifier une géocache existante.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: L'ID de la géocache à mettre à jour
+ *       - in: body
+ *         name: updateData
+ *         required: true
+ *         description: Données à mettre à jour pour la géocache
+ *         schema:
+ *           type: object
+ *           properties:
+ *             name:
+ *               type: string
+ *               description: Le nom de la géocache
+ *             description:
+ *               type: string
+ *               description: La description de la géocache
+ *             latitude:
+ *               type: number
+ *               description: La latitude de la géocache
+ *             longitude:
+ *               type: number
+ *               description: La longitude de la géocache
+ *             difficulty:
+ *               type: string
+ *               description: Le niveau de difficulté de la géocache
+ *             password:
+ *               type: string
+ *               description: Le mot de passe pour valider la géocache
+ *     responses:
+ *       200:
+ *         description: Géocache mise à jour avec succès
+ *       400:
+ *         description: ID invalide
+ *       404:
+ *         description: Géocache non trouvée
+ *       500:
+ *         description: Erreur lors de la mise à jour de la géocache
+ */
 app.put("/geocache/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -492,7 +531,27 @@ app.put("/geocache/:id", async (req, res) => {
   }
 });
 
-// Supprimer une géocache
+/**
+ * @openapi
+ * /geocache/{id}:
+ *   delete:
+ *     summary: Supprimer une géocache
+ *     description: Permet de supprimer une géocache par son ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: L'ID de la géocache à supprimer
+ *     responses:
+ *       200:
+ *         description: Géocache supprimée avec succès
+ *       404:
+ *         description: Géocache non trouvée
+ *       403:
+ *         description: Accès refusé
+ *       500:
+ *         description: Erreur lors de la suppression de la géocache
+ */
 app.delete(
   "/geocache/:id",
   authMiddleware,
@@ -518,6 +577,40 @@ app.delete(
   }
 );
 
+/**
+ * @openapi
+ * /geocache:
+ *   post:
+ *     summary: Ajouter une nouvelle géocache
+ *     description: Permet de créer une nouvelle géocache.
+ *     parameters:
+ *       - in: body
+ *         name: geocache
+ *         required: true
+ *         description: Données de la géocache à ajouter
+ *         schema:
+ *           type: object
+ *           properties:
+ *             name:
+ *               type: string
+ *             creator:
+ *               type: string
+ *             description:
+ *               type: string
+ *             latitude:
+ *               type: number
+ *             longitude:
+ *               type: number
+ *             difficulty:
+ *               type: string
+ *             password:
+ *               type: string
+ *     responses:
+ *       201:
+ *         description: Géocache créée avec succès
+ *       500:
+ *         description: Erreur lors de l'ajout de la géocache
+ */
 app.post("/geocache", async (req, res) => {
   try {
     const {
@@ -545,6 +638,23 @@ app.post("/geocache", async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /geocache/{id}:
+ *   get:
+ *     summary: Obtenir une géocache par ID
+ *     description: Permet d'obtenir les détails d'une géocache en utilisant son ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: L'ID de la géocache
+ *     responses:
+ *       200:
+ *         description: Géocache trouvée
+ *       404:
+ *         description: Géocache non trouvée
+ */
 app.get("/geocache/:id", authMiddleware, async (req, res) => {
   const geocache = await Geocache.findById(req.params.id);
   if (!geocache) {
@@ -553,6 +663,16 @@ app.get("/geocache/:id", authMiddleware, async (req, res) => {
   res.json({ geocache });
 });
 
+/**
+ * @openapi
+ * /geocache:
+ *   get:
+ *     summary: Obtenir toutes les géocaches
+ *     description: Permet d'obtenir toutes les géocaches disponibles.
+ *     responses:
+ *       200:
+ *         description: Liste des géocaches
+ */
 app.get("/geocache", async (req, res) => {
   try {
     const geocaches = await Geocache.find();
@@ -575,6 +695,18 @@ const getValidatedGeocachesForUser = async (userId) => {
     throw error;
   }
 };
+/**
+ * @openapi
+ * /validated-geocaches:
+ *   get:
+ *     summary: Obtenir les géocaches validées par l'utilisateur
+ *     description: Permet d'obtenir les géocaches validées par un utilisateur authentifié.
+ *     responses:
+ *       200:
+ *         description: Liste des géocaches validées
+ *       500:
+ *         description: Erreur serveur
+ */
 app.get("/validated-geocaches", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -587,6 +719,36 @@ app.get("/validated-geocaches", authMiddleware, async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /validate-geocache/{id}:
+ *   post:
+ *     summary: Valider une géocache par un utilisateur
+ *     description: Permet à un utilisateur de valider une géocache en entrant un mot de passe ou de confirmer la validation.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: L'ID de la géocache à valider
+ *       - in: body
+ *         name: password
+ *         required: true
+ *         description: Mot de passe pour valider la géocache
+ *         schema:
+ *           type: object
+ *           properties:
+ *             password:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: Géocache validée avec succès
+ *       400:
+ *         description: Code incorrect
+ *       404:
+ *         description: Géocache non trouvée
+ *       500:
+ *         description: Erreur lors de la validation de la géocache
+ */
 app.post("/validate-geocache/:id", authMiddleware, async (req, res) => {
   const { id } = req.params;
   const { password } = req.body;
@@ -600,8 +762,6 @@ app.post("/validate-geocache/:id", authMiddleware, async (req, res) => {
   if (geocache.password && geocache.password !== password) {
     return res.status(400).json({ error: "Code incorrect." });
   }
-  console.log(geocache.validatedBy);
-  console.log(userId);
 
   if (geocache.validatedBy.includes(userId)) {
     return res
@@ -615,6 +775,32 @@ app.post("/validate-geocache/:id", authMiddleware, async (req, res) => {
   res.json({ message: "Géocache validée avec succès." });
 });
 
+/**
+ * @openapi
+ * /comment/{geocacheId}:
+ *   post:
+ *     summary: Ajouter un commentaire à une géocache
+ *     description: Permet à un utilisateur de commenter une géocache.
+ *     parameters:
+ *       - in: path
+ *         name: geocacheId
+ *         required: true
+ *         description: L'ID de la géocache à commenter
+ *       - in: body
+ *         name: comment
+ *         required: true
+ *         description: Contenu du commentaire
+ *         schema:
+ *           type: object
+ *           properties:
+ *             text:
+ *               type: string
+ *     responses:
+ *       201:
+ *         description: Commentaire ajouté avec succès
+ *       500:
+ *         description: Erreur lors de l'ajout du commentaire
+ */
 app.post("/comment/:geocacheId", authMiddleware, async (req, res) => {
   try {
     const { text } = req.body;
@@ -646,6 +832,23 @@ app.post("/comment/:geocacheId", authMiddleware, async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /comment/{geocacheId}:
+ *   get:
+ *     summary: Obtenir les commentaires d'une géocache
+ *     description: Permet de récupérer les commentaires associés à une géocache.
+ *     parameters:
+ *       - in: path
+ *         name: geocacheId
+ *         required: true
+ *         description: L'ID de la géocache pour récupérer les commentaires
+ *     responses:
+ *       200:
+ *         description: Liste des commentaires
+ *       500:
+ *         description: Erreur lors du chargement des commentaires
+ */
 app.get("/comment/:geocacheId", async (req, res) => {
   try {
     const geocacheId = req.params.geocacheId;

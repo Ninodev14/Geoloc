@@ -272,6 +272,284 @@
           }
         }
       }
+    },
+    "/geocache/{id}": {
+      "put": {
+        "summary": "Mettre à jour une géocache",
+        "description": "Permet de modifier une géocache existante.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "L'ID de la géocache à mettre à jour"
+          },
+          {
+            "in": "body",
+            "name": "updateData",
+            "required": true,
+            "description": "Données à mettre à jour pour la géocache",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Le nom de la géocache"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "La description de la géocache"
+                },
+                "latitude": {
+                  "type": "number",
+                  "description": "La latitude de la géocache"
+                },
+                "longitude": {
+                  "type": "number",
+                  "description": "La longitude de la géocache"
+                },
+                "difficulty": {
+                  "type": "string",
+                  "description": "Le niveau de difficulté de la géocache"
+                },
+                "password": {
+                  "type": "string",
+                  "description": "Le mot de passe pour valider la géocache"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Géocache mise à jour avec succès"
+          },
+          "400": {
+            "description": "ID invalide"
+          },
+          "404": {
+            "description": "Géocache non trouvée"
+          },
+          "500": {
+            "description": "Erreur lors de la mise à jour de la géocache"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Supprimer une géocache",
+        "description": "Permet de supprimer une géocache par son ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "L'ID de la géocache à supprimer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Géocache supprimée avec succès"
+          },
+          "403": {
+            "description": "Accès refusé"
+          },
+          "404": {
+            "description": "Géocache non trouvée"
+          },
+          "500": {
+            "description": "Erreur lors de la suppression de la géocache"
+          }
+        }
+      },
+      "get": {
+        "summary": "Obtenir une géocache par ID",
+        "description": "Permet d'obtenir les détails d'une géocache en utilisant son ID.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "L'ID de la géocache"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Géocache trouvée"
+          },
+          "404": {
+            "description": "Géocache non trouvée"
+          }
+        }
+      }
+    },
+    "/geocache": {
+      "post": {
+        "summary": "Ajouter une nouvelle géocache",
+        "description": "Permet de créer une nouvelle géocache.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "geocache",
+            "required": true,
+            "description": "Données de la géocache à ajouter",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "creator": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "latitude": {
+                  "type": "number"
+                },
+                "longitude": {
+                  "type": "number"
+                },
+                "difficulty": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Géocache créée avec succès"
+          },
+          "500": {
+            "description": "Erreur lors de l'ajout de la géocache"
+          }
+        }
+      },
+      "get": {
+        "summary": "Obtenir toutes les géocaches",
+        "description": "Permet d'obtenir toutes les géocaches disponibles.",
+        "responses": {
+          "200": {
+            "description": "Liste des géocaches"
+          }
+        }
+      }
+    },
+    "/validated-geocaches": {
+      "get": {
+        "summary": "Obtenir les géocaches validées par l'utilisateur",
+        "description": "Permet d'obtenir les géocaches validées par un utilisateur authentifié.",
+        "responses": {
+          "200": {
+            "description": "Liste des géocaches validées"
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        }
+      }
+    },
+    "/validate-geocache/{id}": {
+      "post": {
+        "summary": "Valider une géocache par un utilisateur",
+        "description": "Permet à un utilisateur de valider une géocache en entrant un mot de passe ou de confirmer la validation.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "L'ID de la géocache à valider"
+          },
+          {
+            "in": "body",
+            "name": "password",
+            "required": true,
+            "description": "Mot de passe pour valider la géocache",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Géocache validée avec succès"
+          },
+          "400": {
+            "description": "Code incorrect"
+          },
+          "404": {
+            "description": "Géocache non trouvée"
+          },
+          "500": {
+            "description": "Erreur lors de la validation de la géocache"
+          }
+        }
+      }
+    },
+    "/comment/{geocacheId}": {
+      "post": {
+        "summary": "Ajouter un commentaire à une géocache",
+        "description": "Permet à un utilisateur de commenter une géocache.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "geocacheId",
+            "required": true,
+            "description": "L'ID de la géocache à commenter"
+          },
+          {
+            "in": "body",
+            "name": "comment",
+            "required": true,
+            "description": "Contenu du commentaire",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Commentaire ajouté avec succès"
+          },
+          "500": {
+            "description": "Erreur lors de l'ajout du commentaire"
+          }
+        }
+      },
+      "get": {
+        "summary": "Obtenir les commentaires d'une géocache",
+        "description": "Permet de récupérer les commentaires associés à une géocache.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "geocacheId",
+            "required": true,
+            "description": "L'ID de la géocache pour récupérer les commentaires"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des commentaires"
+          },
+          "500": {
+            "description": "Erreur lors du chargement des commentaires"
+          }
+        }
+      }
     }
   },
   "components": {},
