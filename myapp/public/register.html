@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inscription</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+
+  <body>
+    <div class="formLoginContener">
+      <h2>Inscription</h2>
+      <form id="registerForm" enctype="multipart/form-data">
+        <input
+          type="text"
+          id="username"
+          placeholder="Nom d'utilisateur"
+          required
+        />
+        <input type="email" id="email" placeholder="Email" required />
+        <input
+          type="password"
+          id="password"
+          placeholder="Mot de passe"
+          required
+        />
+        <input type="file" id="profileImage" accept="image/*" required />
+        <p id="message"></p>
+        <button type="submit">S'inscrire</button>
+      </form>
+
+      <p>tu as déjà de conte <a href="login.html">Ce connecter</a></p>
+    </div>
+    <script src="/js/register.js"></script>
+  </body>
+</html>

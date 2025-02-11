@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Géolocalisation</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  </head>
+
+  <body>
+    <h1>Page de Géolocalisation</h1>
+    <p>Bienvenue, <span id="username"></span></p>
+
+    <a href="profile.html">
+      <img
+        style="width: 60px; height: 60px; border-radius: 50%"
+        id="profile-image"
+        src=""
+        alt="Photo de profil"
+      />
+    </a>
+
+    <select id="distance-filter">
+      <option value="10">10 km</option>
+      <option value="100">100 km</option>
+      <option value="1000">1000 km</option>
+      <option value="5000">5000 km</option>
+      <option value="0">Tous les résultats</option>
+    </select>
+
+    <button id="logoutBtn">Se déconnecter</button>
+    <h1>Carte des Géocaches</h1>
+    <div id="map" style="height: 500px"></div>
+
+    <button
+      id="addGeocacheBtn"
+      style="
+        display: block;
+        margin: 20px auto;
+        padding: 10px 15px;
+        font-size: 16px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+      "
+    >
+      ➕ Ajouter une Géocache
+    </button>
+
+    <div id="comments-section" style="display: none">
+      <h3>Commentaires</h3>
+      <div id="comments-list"></div>
+      <textarea
+        id="comment-text"
+        placeholder="Ajoutez un commentaire"
+      ></textarea>
+      <button id="submit-comment" style="margin-top: 10px">
+        Ajouter Commentaire
+      </button>
+    </div>
+  </body>
+  <script src="js/showGeoloc.js"></script>
+  <script src="js/profilImg.js"></script>
+</html>

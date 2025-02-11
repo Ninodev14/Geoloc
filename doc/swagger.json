@@ -1,0 +1,279 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API REST Documentation",
+    "version": "1.0.0",
+    "description": "Documentation de l'API REST avec Swagger"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000"
+    }
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "summary": "Inscription d'un utilisateur",
+        "description": "Crée un utilisateur avec un mot de passe hashé et une image de profil.",
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "username",
+            "type": "string",
+            "required": true,
+            "description": "Nom d'utilisateur"
+          },
+          {
+            "in": "formData",
+            "name": "email",
+            "type": "string",
+            "required": true,
+            "description": "Email de l'utilisateur"
+          },
+          {
+            "in": "formData",
+            "name": "password",
+            "type": "string",
+            "required": true,
+            "description": "Mot de passe de l'utilisateur"
+          },
+          {
+            "in": "formData",
+            "name": "profileImage",
+            "type": "file",
+            "required": false,
+            "description": "Image de profil de l'utilisateur"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Utilisateur créé avec succès"
+          },
+          "500": {
+            "description": "Erreur lors de l'inscription"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Connexion d'un utilisateur",
+        "description": "Permet à un utilisateur de se connecter en utilisant son email et mot de passe.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "L'email de l'utilisateur"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Le mot de passe de l'utilisateur"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Connexion réussie, retourne un token"
+          },
+          "400": {
+            "description": "Erreur de connexion (utilisateur non trouvé ou mot de passe incorrect)"
+          },
+          "500": {
+            "description": "Erreur lors de la connexion"
+          }
+        }
+      }
+    },
+    "/profile": {
+      "get": {
+        "summary": "Récupérer le profil d'un utilisateur",
+        "description": "Permet à un utilisateur connecté de récupérer son profil.",
+        "responses": {
+          "200": {
+            "description": "Profil de l'utilisateur récupéré avec succès"
+          },
+          "404": {
+            "description": "Utilisateur non trouvé"
+          },
+          "500": {
+            "description": "Erreur lors de la récupération du profil"
+          }
+        }
+      }
+    },
+    "/make-admin": {
+      "post": {
+        "summary": "Promouvoir un utilisateur en administrateur",
+        "description": "Permet à un administrateur de promouvoir un utilisateur en tant qu'administrateur.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "L'email de l'utilisateur à promouvoir"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Utilisateur promu administrateur"
+          },
+          "404": {
+            "description": "Utilisateur non trouvé"
+          },
+          "500": {
+            "description": "Erreur lors de la promotion de l'utilisateur"
+          }
+        }
+      }
+    },
+    "/delete-user": {
+      "delete": {
+        "summary": "Supprimer un utilisateur",
+        "description": "Permet à un administrateur de supprimer un utilisateur.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "L'email de l'utilisateur à supprimer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Utilisateur supprimé avec succès"
+          },
+          "404": {
+            "description": "Utilisateur non trouvé"
+          },
+          "500": {
+            "description": "Erreur lors de la suppression de l'utilisateur"
+          }
+        }
+      }
+    },
+    "/edit-user": {
+      "put": {
+        "summary": "Modifier un utilisateur",
+        "description": "Permet à un administrateur de modifier les informations d'un utilisateur.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "L'email de l'utilisateur à modifier"
+                  },
+                  "newUsername": {
+                    "type": "string",
+                    "description": "Nouveau nom d'utilisateur"
+                  },
+                  "newIsAdmin": {
+                    "type": "boolean",
+                    "description": "Nouveau statut administrateur"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Utilisateur modifié avec succès"
+          },
+          "404": {
+            "description": "Utilisateur non trouvé"
+          },
+          "500": {
+            "description": "Erreur lors de la modification de l'utilisateur"
+          }
+        }
+      }
+    },
+    "/admin/user": {
+      "get": {
+        "summary": "Récupérer tous les utilisateurs",
+        "description": "Permet à un administrateur de récupérer la liste de tous les utilisateurs.",
+        "responses": {
+          "200": {
+            "description": "Liste des utilisateurs récupérée avec succès"
+          },
+          "500": {
+            "description": "Erreur lors de la récupération des utilisateurs"
+          }
+        }
+      }
+    },
+    "/geocache/validate-password/{id}": {
+      "post": {
+        "summary": "Valider une géocache en entrant le mot de passe",
+        "description": "Permet à un utilisateur de valider une géocache en entrant le mot de passe associé.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "L'ID de la géocache"
+          },
+          {
+            "in": "body",
+            "name": "password",
+            "required": true,
+            "description": "Mot de passe pour valider la géocache",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "type": "string",
+                  "description": "Mot de passe de la géocache"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mot de passe valide, géocache validée"
+          },
+          "400": {
+            "description": "Mot de passe incorrect"
+          },
+          "404": {
+            "description": "Géocache non trouvée"
+          },
+          "500": {
+            "description": "Erreur lors de la validation du mot de passe"
+          }
+        }
+      }
+    }
+  },
+  "components": {},
+  "tags": []
+}
