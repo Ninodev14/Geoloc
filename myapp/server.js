@@ -812,7 +812,6 @@ app.post(
       const { text } = req.body;
       const geocacheId = req.params.geocacheId;
 
-      // Vérifier si la géocache existe
       const geocache = await Geocache.findById(geocacheId);
       if (!geocache) {
         return res.status(404).json({ error: "Géocache non trouvée" });
@@ -822,12 +821,11 @@ app.post(
         return res.status(401).json({ error: "Utilisateur non authentifié" });
       }
 
-      // 📌 Sauvegarder l'image si elle est envoyée
       const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
       const newComment = new Comment({
         text,
-        image: imageUrl, // Ajout de l'URL de l'image au commentaire
+        image: imageUrl,
         creator: req.user.userId,
         geocache: geocacheId,
       });
