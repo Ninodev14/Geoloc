@@ -39,6 +39,7 @@ var _this = this;
 var leafletScript = document.createElement("script");
 leafletScript.src = "https://unpkg.com/leaflet/dist/leaflet.js";
 leafletScript.onload = function () { return initializeMap(); };
+var userMarker = null;
 document.head.appendChild(leafletScript);
 var map;
 var selectedGeocacheId = null;
@@ -52,7 +53,7 @@ var defaultIcon = new L.Icon({
 });
 var distanceLimit = 10;
 var initializeMap = function () { return __awaiter(_this, void 0, void 0, function () {
-    var userLocation, userMarker, error_1, distanceFilter;
+    var userLocation, error_1, distanceFilter;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -186,6 +187,14 @@ var loadGeocaches = function () { return __awaiter(_this, void 0, void 0, functi
                 return [4 /*yield*/, getUserLocation()];
             case 6:
                 userLocation_1 = _a.sent();
+                map.eachLayer(function (layer) {
+                    if (layer instanceof L.Marker) {
+                        map.removeLayer(layer);
+                    }
+                });
+                if (userMarker) {
+                    userMarker.addTo(map);
+                }
                 geocaches.forEach(function (geo) {
                     var geoLocation = L.latLng(geo.latitude, geo.longitude);
                     var distanceToGeo = userLocation_1.distanceTo(geoLocation) / 1000;

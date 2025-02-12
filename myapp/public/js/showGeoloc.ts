@@ -1,6 +1,7 @@
 const leafletScript = document.createElement("script");
 leafletScript.src = "https://unpkg.com/leaflet/dist/leaflet.js";
 leafletScript.onload = () => initializeMap();
+let userMarker: L.Marker | null = null;
 document.head.appendChild(leafletScript);
 
 let map: L.Map;
@@ -27,7 +28,7 @@ const initializeMap = async () => {
   try {
     const userLocation = await getUserLocation();
 
-    const userMarker = L.marker(userLocation, {
+    userMarker = L.marker(userLocation, {
       icon: L.icon({
         iconUrl: "https://cdn-icons-png.flaticon.com/512/64/64486.png",
         iconSize: [32, 32],
@@ -160,7 +161,14 @@ const loadGeocaches = async (): Promise<void> => {
     );
 
     const userLocation = await getUserLocation();
-
+    map.eachLayer((layer) => {
+      if (layer instanceof L.Marker) {
+        map.removeLayer(layer);
+      }
+    });
+    if (userMarker) {
+      userMarker.addTo(map);
+    }
     geocaches.forEach((geo) => {
       const geoLocation = L.latLng(geo.latitude, geo.longitude);
       const distanceToGeo = userLocation.distanceTo(geoLocation) / 1000;
