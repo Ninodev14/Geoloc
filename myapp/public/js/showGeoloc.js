@@ -51,18 +51,47 @@ var defaultIcon = new L.Icon({
     iconSize: [32, 32],
 });
 var distanceLimit = 10;
-var initializeMap = function () {
-    map = L.map("map").setView([48.8566, 2.3522], 6);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "© OpenStreetMap",
-    }).addTo(map);
-    getUserData();
-    var distanceFilter = document.getElementById("distance-filter");
-    distanceFilter.addEventListener("change", function (event) {
-        distanceLimit = parseInt(event.target.value, 10); // Update distance limit
-        loadGeocaches(); // Reload geocaches with the new filter
+var initializeMap = function () { return __awaiter(_this, void 0, void 0, function () {
+    var userLocation, userMarker, error_1, distanceFilter;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                map = L.map("map").setView([48.8566, 2.3522], 6);
+                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                    attribution: "© OpenStreetMap",
+                }).addTo(map);
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, getUserLocation()];
+            case 2:
+                userLocation = _a.sent();
+                userMarker = L.marker(userLocation, {
+                    icon: L.icon({
+                        iconUrl: "https://cdn-icons-png.flaticon.com/512/64/64486.png",
+                        iconSize: [32, 32],
+                    }),
+                })
+                    .addTo(map)
+                    .bindPopup("Vous êtes ici !")
+                    .openPopup();
+                map.setView(userLocation, 13);
+                return [3 /*break*/, 4];
+            case 3:
+                error_1 = _a.sent();
+                console.error("Impossible de récupérer la localisation :", error_1);
+                return [3 /*break*/, 4];
+            case 4:
+                getUserData();
+                distanceFilter = document.getElementById("distance-filter");
+                distanceFilter.addEventListener("change", function (event) {
+                    distanceLimit = parseInt(event.target.value, 10);
+                    loadGeocaches();
+                });
+                return [2 /*return*/];
+        }
     });
-};
+}); };
 var getUserLocation = function () {
     return new Promise(function (resolve, reject) {
         if (navigator.geolocation) {
@@ -79,7 +108,7 @@ var getUserLocation = function () {
 };
 var userData = null;
 var getUserData = function () { return __awaiter(_this, void 0, void 0, function () {
-    var token, response, data, error_1;
+    var token, response, data, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -110,15 +139,15 @@ var getUserData = function () { return __awaiter(_this, void 0, void 0, function
                 loadGeocaches();
                 return [3 /*break*/, 4];
             case 3:
-                error_1 = _a.sent();
-                console.error("Erreur lors de la récupération des données utilisateur:", error_1);
+                error_2 = _a.sent();
+                console.error("Erreur lors de la récupération des données utilisateur:", error_2);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); };
 var loadGeocaches = function () { return __awaiter(_this, void 0, void 0, function () {
-    var response, geocaches, token, validatedGeocaches_1, validationResponse, userId, localValidatedGeocaches_1, userLocation_1, error_2;
+    var response, geocaches, token, validatedGeocaches_1, validationResponse, userId, localValidatedGeocaches_1, userLocation_1, error_3;
     var _this = this;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -163,7 +192,6 @@ var loadGeocaches = function () { return __awaiter(_this, void 0, void 0, functi
                     if (distanceLimit > 0 && distanceToGeo > distanceLimit) {
                         return;
                     }
-                    // Vérifier si cette géocache a été validée par l'utilisateur actuel
                     var isValidatedLocally = localValidatedGeocaches_1.includes(geo._id) ||
                         validatedGeocaches_1.includes(geo._id);
                     var popupContent = "<b>".concat(geo.name, "</b><br>\n        Difficult\u00E9: ").concat(geo.difficulty, "<br>\n        Cr\u00E9\u00E9e par: ").concat(geo.creator, "<br>\n        Description: ").concat(geo.description, "<br>");
@@ -174,7 +202,6 @@ var loadGeocaches = function () { return __awaiter(_this, void 0, void 0, functi
                         popupContent += "<button class=\"validateBtn\" data-id=\"".concat(geo._id, "\" style=\"margin-top: 10px;\">Valider</button>");
                     }
                     popupContent += "<button class=\"show-comments-btn\" data-id=\"".concat(geo._id, "\" style=\"margin-top: 10px;\">Voir Commentaires</button>");
-                    // Si validée par l'utilisateur ou globalement validée, utiliser greenIcon
                     var markerIcon = isValidatedLocally || geo.isValidated ? greenIcon : defaultIcon;
                     var marker = L.marker([geo.latitude, geo.longitude], {
                         icon: markerIcon,
@@ -231,15 +258,15 @@ var loadGeocaches = function () { return __awaiter(_this, void 0, void 0, functi
                 });
                 return [3 /*break*/, 8];
             case 7:
-                error_2 = _a.sent();
-                console.error("Erreur de chargement des géocaches:", error_2);
+                error_3 = _a.sent();
+                console.error("Erreur de chargement des géocaches:", error_3);
                 return [3 /*break*/, 8];
             case 8: return [2 /*return*/];
         }
     });
 }); };
 var validateGeocache = function (geocacheId, code, marker) { return __awaiter(_this, void 0, void 0, function () {
-    var token, response, data, userId, validatedGeocaches, validateBtn, error_3;
+    var token, response, data, userId, validatedGeocaches, validateBtn, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -260,7 +287,6 @@ var validateGeocache = function (geocacheId, code, marker) { return __awaiter(_t
                 data = _a.sent();
                 if (response.ok) {
                     alert(data.message);
-                    // Mettre à jour l'icône du marqueur pour indiquer que la géocache est validée
                     marker.setIcon(greenIcon);
                     userId = userData === null || userData === void 0 ? void 0 : userData.username;
                     if (!userId) {
@@ -282,8 +308,8 @@ var validateGeocache = function (geocacheId, code, marker) { return __awaiter(_t
                 }
                 return [3 /*break*/, 4];
             case 3:
-                error_3 = _a.sent();
-                console.error("Erreur lors de la validation :", error_3);
+                error_4 = _a.sent();
+                console.error("Erreur lors de la validation :", error_4);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }

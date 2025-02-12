@@ -17,12 +17,30 @@ const defaultIcon = new L.Icon({
 
 let distanceLimit: number = 10;
 
-const initializeMap = () => {
+const initializeMap = async () => {
   map = L.map("map").setView([48.8566, 2.3522], 6);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "© OpenStreetMap",
   }).addTo(map);
+
+  try {
+    const userLocation = await getUserLocation();
+
+    const userMarker = L.marker(userLocation, {
+      icon: L.icon({
+        iconUrl: "https://cdn-icons-png.flaticon.com/512/64/64486.png",
+        iconSize: [32, 32],
+      }),
+    })
+      .addTo(map)
+      .bindPopup("Vous êtes ici !")
+      .openPopup();
+
+    map.setView(userLocation, 13);
+  } catch (error) {
+    console.error("Impossible de récupérer la localisation :", error);
+  }
 
   getUserData();
 
@@ -30,8 +48,8 @@ const initializeMap = () => {
     "distance-filter"
   ) as HTMLSelectElement;
   distanceFilter.addEventListener("change", (event) => {
-    distanceLimit = parseInt((event.target as HTMLSelectElement).value, 10); // Update distance limit
-    loadGeocaches(); // Reload geocaches with the new filter
+    distanceLimit = parseInt((event.target as HTMLSelectElement).value, 10);
+    loadGeocaches();
   });
 };
 
@@ -130,15 +148,13 @@ const loadGeocaches = async (): Promise<void> => {
       validatedGeocaches = await validationResponse.json();
     }
 
-    // Récupérer l'ID utilisateur depuis localStorage
-    const userId = userData?.username; // Utiliser le username comme ID unique
+    const userId = userData?.username;
 
     if (!userId) {
       console.error("Utilisateur non trouvé");
       return;
     }
 
-    // Vérifier les géocaches validées dans le localStorage pour cet utilisateur
     const localValidatedGeocaches = JSON.parse(
       localStorage.getItem(`validatedGeocaches_${userId}`) || "[]"
     );
@@ -153,7 +169,6 @@ const loadGeocaches = async (): Promise<void> => {
         return;
       }
 
-      // Vérifier si cette géocache a été validée par l'utilisateur actuel
       const isValidatedLocally =
         localValidatedGeocaches.includes(geo._id) ||
         validatedGeocaches.includes(geo._id);
@@ -176,7 +191,6 @@ const loadGeocaches = async (): Promise<void> => {
 
       popupContent += `<button class="show-comments-btn" data-id="${geo._id}" style="margin-top: 10px;">Voir Commentaires</button>`;
 
-      // Si validée par l'utilisateur ou globalement validée, utiliser greenIcon
       const markerIcon =
         isValidatedLocally || geo.isValidated ? greenIcon : defaultIcon;
 
@@ -264,18 +278,15 @@ const validateGeocache = async (geocacheId, code, marker) => {
     if (response.ok) {
       alert(data.message);
 
-      // Mettre à jour l'icône du marqueur pour indiquer que la géocache est validée
       marker.setIcon(greenIcon);
 
-      // Récupérer l'ID utilisateur depuis localStorage
-      const userId = userData?.username; // Utiliser le username comme ID unique
+      const userId = userData?.username;
 
       if (!userId) {
         console.error("Utilisateur non trouvé");
         return;
       }
 
-      // Ajouter cette géocache à la liste validée localement pour l'utilisateur
       const validatedGeocaches = JSON.parse(
         localStorage.getItem(`validatedGeocaches_${userId}`) || "[]"
       );
@@ -287,7 +298,6 @@ const validateGeocache = async (geocacheId, code, marker) => {
         );
       }
 
-      // Supprimer le bouton de validation dans l'interface
       const validateBtn = document.querySelector(
         `.validateBtn[data-id="${geocacheId}"]`
       );
