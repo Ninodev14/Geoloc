@@ -33,7 +33,6 @@ const initializeMap = async () => {
 
     const geocache = await response.json();
 
-    // Création de la carte centrée sur la géocache
     map = L.map("map").setView(
       [geocache.geocache.latitude, geocache.geocache.longitude],
       13
@@ -42,7 +41,6 @@ const initializeMap = async () => {
       attribution: "© OpenStreetMap",
     }).addTo(map);
 
-    // Ajout d'un marqueur avec les infos de la géocache
     L.marker([geocache.geocache.latitude, geocache.geocache.longitude]).addTo(
       map
     ).bindPopup(`
@@ -59,6 +57,46 @@ const initializeMap = async () => {
     alert(error.message);
   }
 };
+document
+  .getElementById("submit-comment")
+  ?.addEventListener("click", async () => {
+    const commentText = document.getElementById("comment-text").value.trim();
+    const commentImage = document.getElementById("comment-image").files[0];
+
+    if (!commentText) {
+      alert("Veuillez entrer un commentaire.");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Vous devez être connecté pour commenter.");
+
+      const formData = new FormData();
+      formData.append("text", commentText);
+      if (commentImage) formData.append("image", commentImage);
+
+      const response = await fetch(
+        `http://localhost:5000/comment/${geocacheId}`,
+        {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        }
+      );
+
+      if (!response.ok)
+        throw new Error("Erreur lors de l'ajout du commentaire.");
+
+      document.getElementById("comment-text").value = "";
+      document.getElementById("comment-image").value = "";
+
+      loadComments();
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  });
 
 const loadComments = async () => {
   const commentsList = document.getElementById("comments-list");
@@ -72,9 +110,7 @@ const loadComments = async () => {
     const response = await fetch(
       `http://localhost:5000/comment/${geocacheId}`,
       {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       }
     );
 
@@ -90,6 +126,11 @@ const loadComments = async () => {
               <p><strong>${comment.creator.username || "Anonyme"}</strong>: ${
               comment.text
             }</p>
+              ${
+                comment.image
+                  ? `<img src="http://localhost:5000${comment.image}" alt="Image du commentaire" style="max-width: 200px; margin-top: 5px;"/>`
+                  : ""
+              }
             </div>`
           )
           .join("")
@@ -99,43 +140,6 @@ const loadComments = async () => {
     commentsList.innerHTML = "<p>Impossible de charger les commentaires.</p>";
   }
 };
-
-document
-  .getElementById("submit-comment")
-  ?.addEventListener("click", async () => {
-    const commentText = document.getElementById("comment-text").value.trim();
-    if (!commentText) {
-      alert("Veuillez entrer un commentaire.");
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("Vous devez être connecté pour commenter.");
-
-      const response = await fetch(
-        `http://localhost:5000/comment/${geocacheId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ text: commentText }),
-        }
-      );
-
-      if (!response.ok)
-        throw new Error("Erreur lors de l'ajout du commentaire.");
-
-      document.getElementById("comment-text").value = "";
-
-      loadComments();
-    } catch (error) {
-      console.error(error);
-      alert(error.message);
-    }
-  });
 
 document.getElementById("logoutBtn")?.addEventListener("click", () => {
   localStorage.removeItem("token");

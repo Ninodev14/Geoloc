@@ -52,6 +52,7 @@ const GeocacheSchema = new mongoose.Schema({
 
 const CommentSchema = new mongoose.Schema({
   text: { type: String, required: true },
+  image: { type: String, default: null },
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -801,36 +802,48 @@ app.post("/validate-geocache/:id", authMiddleware, async (req, res) => {
  *       500:
  *         description: Erreur lors de l'ajout du commentaire
  */
-app.post("/comment/:geocacheId", authMiddleware, async (req, res) => {
-  try {
-    const { text } = req.body;
-    const geocacheId = req.params.geocacheId;
 
-    const geocache = await Geocache.findById(geocacheId);
-    if (!geocache) {
-      return res.status(404).json({ error: "Géocache non trouvée" });
+app.post(
+  "/comment/:geocacheId",
+  authMiddleware,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const { text } = req.body;
+      const geocacheId = req.params.geocacheId;
+
+      // Vérifier si la géocache existe
+      const geocache = await Geocache.findById(geocacheId);
+      if (!geocache) {
+        return res.status(404).json({ error: "Géocache non trouvée" });
+      }
+
+      if (!req.user || !req.user.userId) {
+        return res.status(401).json({ error: "Utilisateur non authentifié" });
+      }
+
+      // 📌 Sauvegarder l'image si elle est envoyée
+      const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+
+      const newComment = new Comment({
+        text,
+        image: imageUrl, // Ajout de l'URL de l'image au commentaire
+        creator: req.user.userId,
+        geocache: geocacheId,
+      });
+
+      await newComment.save();
+
+      res.status(201).json({
+        message: "Commentaire ajouté avec succès",
+        comment: newComment,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Erreur lors de l'ajout du commentaire" });
     }
-
-    if (!req.user || !req.user.userId) {
-      return res.status(401).json({ error: "Utilisateur non authentifié" });
-    }
-
-    const newComment = new Comment({
-      text,
-      creator: req.user.userId,
-      geocache: geocacheId,
-    });
-
-    await newComment.save();
-
-    res
-      .status(201)
-      .json({ message: "Commentaire ajouté avec succès", comment: newComment });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erreur lors de l'ajout du commentaire" });
   }
-});
+);
 
 /**
  * @openapi
