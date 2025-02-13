@@ -877,6 +877,39 @@ app.get("/comment/:geocacheId", async (req, res) => {
   }
 });
 
+app.get("/rankings", authMiddleware, async (req, res) => {
+  try {
+    const userRankings = await User.aggregate([
+      {
+        $project: {
+          username: 1,
+          foundGeocaches: { $size: { $ifNull: ["$validatedGeocaches", []] } },
+        },
+      },
+      { $sort: { foundGeocaches: -1 } },
+      { $limit: 10 },
+    ]);
+
+    const geocacheRankings = await Geocache.aggregate([
+      {
+        $project: {
+          name: 1,
+          foundCount: { $size: { $ifNull: ["$validatedBy", []] } },
+        },
+      },
+      { $sort: { foundCount: -1 } },
+      { $limit: 10 },
+    ]);
+
+    res.json({ userRankings, geocacheRankings });
+  } catch (error) {
+    console.error("Erreur lors du chargement du classement:", error);
+    res
+      .status(500)
+      .json({ message: "Erreur interne du serveur", error: error.message });
+  }
+});
+
 const PORT = 5000;
 app.listen(PORT, () =>
   console.log(`Serveur en écoute sur http://localhost:${PORT}`)
