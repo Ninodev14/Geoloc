@@ -1,4 +1,3 @@
-// Fonction pour récupérer les données de la géocache à éditer
 const getGeocacheData = async (): Promise<void> => {
   const geocacheId = new URLSearchParams(window.location.search).get("id");
   if (!geocacheId) {

@@ -1,16 +1,12 @@
-// Interface pour la réponse de l'API
 interface RegisterResponse {
   message?: string;
   error?: string;
 }
-
-// Gestion du formulaire d'inscription
 document
   .getElementById("registerForm")
   ?.addEventListener("submit", async (e: Event) => {
     e.preventDefault();
 
-    // Sélection des éléments du formulaire
     const usernameInput = document.getElementById(
       "username"
     ) as HTMLInputElement | null;

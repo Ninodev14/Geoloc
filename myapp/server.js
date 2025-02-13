@@ -852,10 +852,65 @@ app.post(
   }
 );
 
-// Route pour liker une géocache
+/**
+ * @openapi
+ * /geocache/{id}/like:
+ *   post:
+ *     summary: Ajouter un like à une géocache
+ *     description: Permet à un utilisateur d'ajouter un like à une géocache. Si l'utilisateur a déjà aimé la géocache, une erreur est renvoyée.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: L'ID de la géocache que l'on veut liker
+ *     responses:
+ *       200:
+ *         description: Géocache aimée avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Géocache aimée avec succès"
+ *                 likes:
+ *                   type: integer
+ *                   example: 10
+ *       400:
+ *         description: L'utilisateur a déjà aimé cette géocache
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Vous avez déjà aimé cette géocache."
+ *       404:
+ *         description: La géocache n'a pas été trouvée
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Géocache introuvable"
+ *       500:
+ *         description: Erreur lors du like de la géocache
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Erreur lors du like de la géocache."
+ */
 app.post("/geocache/:id/like", async (req, res) => {
   const geocacheId = req.params.id;
-  const userId = req.userId; // Assure-toi d'ajouter l'userId à partir du token JWT
+  const userId = req.userId;
 
   try {
     const geocache = await Geocache.findById(geocacheId);
@@ -863,14 +918,12 @@ app.post("/geocache/:id/like", async (req, res) => {
       return res.status(404).json({ message: "Géocache introuvable" });
     }
 
-    // Vérifie si l'utilisateur a déjà liké cette géocache
     if (geocache.likes.includes(userId)) {
       return res
         .status(400)
         .json({ message: "Vous avez déjà aimé cette géocache." });
     }
 
-    // Ajoute l'utilisateur aux likes
     geocache.likes.push(userId);
     await geocache.save();
 
@@ -918,6 +971,58 @@ app.get("/comment/:geocacheId", async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /rankings:
+ *   get:
+ *     summary: Récupérer les classements des utilisateurs et des géocaches
+ *     description: Récupère les 10 utilisateurs avec le plus grand nombre de géocaches trouvées et les 10 géocaches les plus trouvées.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Classements des utilisateurs et géocaches récupérés avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 userRankings:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       username:
+ *                         type: string
+ *                         example: "john_doe"
+ *                       foundCount:
+ *                         type: integer
+ *                         example: 25
+ *                 geocacheRankings:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                         example: "Geocache A"
+ *                       foundCount:
+ *                         type: integer
+ *                         example: 100
+ *       500:
+ *         description: Erreur serveur lors du chargement des classements
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Erreur interne du serveur"
+ *                 error:
+ *                   type: string
+ *                   example: "Une erreur s'est produite."
+ */
 app.get("/rankings", authMiddleware, async (req, res) => {
   try {
     const userRankings = await User.aggregate([
@@ -950,6 +1055,45 @@ app.get("/rankings", authMiddleware, async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /most-popular-geocaches:
+ *   get:
+ *     summary: Récupérer les géocaches les plus populaires
+ *     description: Récupère les 10 géocaches les plus aimées, triées par le nombre total de likes.
+ *     responses:
+ *       200:
+ *         description: Liste des géocaches les plus populaires récupérée avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                     example: "Geocache A"
+ *                   description:
+ *                     type: string
+ *                     example: "Une description de la géocache."
+ *                   totalLikes:
+ *                     type: integer
+ *                     example: 150
+ *       500:
+ *         description: Erreur serveur lors de la récupération des géocaches populaires
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Erreur serveur."
+ *                 details:
+ *                   type: string
+ *                   example: "Une erreur s'est produite."
+ */
 app.get("/most-popular-geocaches", async (req, res) => {
   try {
     const mostLikedGeocaches = await Geocache.aggregate([

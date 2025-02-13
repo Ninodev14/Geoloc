@@ -36,7 +36,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _a;
 var _this = this;
-// Fonction pour récupérer les données de la géocache à éditer
 var getGeocacheData = function () { return __awaiter(_this, void 0, void 0, function () {
     var geocacheId, response, data, geocache, error_1;
     return __generator(this, function (_a) {

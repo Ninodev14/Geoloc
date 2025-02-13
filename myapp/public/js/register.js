@@ -36,7 +36,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _a;
 var _this = this;
-// Gestion du formulaire d'inscription
 (_a = document
     .getElementById("registerForm")) === null || _a === void 0 ? void 0 : _a.addEventListener("submit", function (e) { return __awaiter(_this, void 0, void 0, function () {
     var usernameInput, emailInput, passwordInput, imageInput, messageElement, username, email, password, imageFile, formData, response, data, error_1;
