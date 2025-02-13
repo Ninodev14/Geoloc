@@ -34,12 +34,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _a, _b, _c;
+var _a, _b, _c, _d;
 var _this = this;
+var getCurrentUserId = function (token) {
+    if (!token)
+        return null;
+    try {
+        var payload = JSON.parse(atob(token.split(".")[1]));
+        return payload.userId;
+    }
+    catch (error) {
+        console.error("Erreur lors du décodage du token", error);
+        return null;
+    }
+};
 var map;
 var geocacheId = new URLSearchParams(window.location.search).get("id");
 var initializeMap = function () { return __awaiter(_this, void 0, void 0, function () {
-    var token, response, geocache, error_1;
+    var token, response, geocache, likeButton, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -78,6 +90,10 @@ var initializeMap = function () { return __awaiter(_this, void 0, void 0, functi
                     attribution: "© OpenStreetMap",
                 }).addTo(map);
                 L.marker([geocache.geocache.latitude, geocache.geocache.longitude]).addTo(map).bindPopup("\n        <b>".concat(geocache.geocache.name, "</b><br>\n        ").concat(geocache.geocache.description, "<br>\n        Difficult\u00E9: ").concat(geocache.geocache.difficulty, "<br>\n        Cr\u00E9\u00E9e par: ").concat(geocache.geocache.creator, "\n    "));
+                likeButton = document.getElementById("like-geocache-btn");
+                if (likeButton && geocache.geocache.likes) {
+                    likeButton.innerHTML = "\u2764\uFE0F Aimer la G\u00E9ocache (".concat(geocache.geocache.likes.length, ")");
+                }
                 loadComments();
                 return [3 /*break*/, 5];
             case 4:
@@ -148,24 +164,24 @@ var loadComments = function () { return __awaiter(_this, void 0, void 0, functio
                 _a.trys.push([1, 4, , 5]);
                 token = localStorage.getItem("token");
                 if (!token)
-                    throw new Error("Vous devez être connecté pour voir les commentaires.");
+                    throw new Error("Vous devez être connecté.");
                 return [4 /*yield*/, fetch("http://localhost:5000/comment/".concat(geocacheId), {
                         headers: { Authorization: "Bearer ".concat(token) },
                     })];
             case 2:
                 response = _a.sent();
                 if (!response.ok)
-                    throw new Error("Erreur lors du chargement des commentaires.");
+                    throw new Error("Erreur de chargement des commentaires.");
                 return [4 /*yield*/, response.json()];
             case 3:
                 data = _a.sent();
                 commentsList.innerHTML = data.comments.length
                     ? data.comments
-                        .map(function (comment) { return "\n            <div class=\"comment\">\n              <p><strong>".concat(comment.creator.username || "Anonyme", "</strong>: ").concat(comment.text, "</p>\n              ").concat(comment.image
-                        ? "<img src=\"http://localhost:5000".concat(comment.image, "\" alt=\"Image du commentaire\" style=\"max-width: 200px; margin-top: 5px;\"/>")
+                        .map(function (comment) { return " \n            <div class=\"comment\" data-id=\"".concat(comment._id, "\">\n              <p><strong>").concat(comment.creator.username || "Anonyme", "</strong>: ").concat(comment.text, "</p>\n              ").concat(comment.image
+                        ? "<img src=\"http://localhost:5000".concat(comment.image, "\" style=\"max-width: 200px;\"/>")
                         : "", "\n            </div>"); })
                         .join("")
-                    : "<p>Aucun commentaire pour cette géocache.</p>";
+                    : "<p>Aucun commentaire.</p>";
                 return [3 /*break*/, 5];
             case 4:
                 error_3 = _a.sent();
@@ -176,12 +192,116 @@ var loadComments = function () { return __awaiter(_this, void 0, void 0, functio
         }
     });
 }); };
-(_b = document.getElementById("logoutBtn")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", function () {
+(_b = document
+    .getElementById("like-geocache-btn")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", function () { return __awaiter(_this, void 0, void 0, function () {
+    var token, currentUserId, response, errorResponse, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 4, , 5]);
+                token = localStorage.getItem("token");
+                if (!token)
+                    throw new Error("Vous devez être connecté pour aimer cette géocache.");
+                currentUserId = getCurrentUserId(token);
+                if (!currentUserId)
+                    throw new Error("Impossible de récupérer l'ID de l'utilisateur.");
+                return [4 /*yield*/, fetch("http://localhost:5000/geocache/".concat(geocacheId, "/like"), {
+                        method: "POST",
+                        headers: {
+                            Authorization: "Bearer ".concat(token),
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ userId: currentUserId }),
+                    })];
+            case 1:
+                response = _a.sent();
+                if (!!response.ok) return [3 /*break*/, 3];
+                return [4 /*yield*/, response.json()];
+            case 2:
+                errorResponse = _a.sent();
+                console.error("Error details:", errorResponse);
+                throw new Error(errorResponse.message || "Erreur lors de l'ajout du like.");
+            case 3:
+                alert("Vous avez aimé cette géocache !");
+                updateLikeCount();
+                return [3 /*break*/, 5];
+            case 4:
+                error_4 = _a.sent();
+                console.error(error_4);
+                alert(error_4.message);
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); });
+var updateLikeCount = function () { return __awaiter(_this, void 0, void 0, function () {
+    var token, response, geocache, likeButton, error_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                token = localStorage.getItem("token");
+                if (!token)
+                    throw new Error("Vous devez être connecté.");
+                return [4 /*yield*/, fetch("http://localhost:5000/geocache/".concat(geocacheId), {
+                        headers: { Authorization: "Bearer ".concat(token) },
+                    })];
+            case 1:
+                response = _a.sent();
+                if (!response.ok)
+                    throw new Error("Erreur de récupération des données.");
+                return [4 /*yield*/, response.json()];
+            case 2:
+                geocache = _a.sent();
+                likeButton = document.getElementById("like-geocache-btn");
+                if (likeButton && geocache.geocache.likes) {
+                    likeButton.innerHTML = "\u2764\uFE0F Aimer la G\u00E9ocache (".concat(geocache.geocache.likes.length, ")");
+                }
+                return [3 /*break*/, 4];
+            case 3:
+                error_5 = _a.sent();
+                console.error(error_5);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+var likeComment = function (commentId, btn) { return __awaiter(_this, void 0, void 0, function () {
+    var token, response, currentLikes, error_6;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                token = localStorage.getItem("token");
+                if (!token)
+                    throw new Error("Vous devez être connecté.");
+                return [4 /*yield*/, fetch("http://localhost:5000/comment/".concat(commentId, "/like"), {
+                        method: "POST",
+                        headers: { Authorization: "Bearer ".concat(token) },
+                    })];
+            case 1:
+                response = _a.sent();
+                if (!response.ok)
+                    throw new Error("Erreur lors du like.");
+                currentLikes = btn.querySelector("span");
+                currentLikes.textContent = parseInt(currentLikes.textContent) + 1;
+                return [3 /*break*/, 3];
+            case 2:
+                error_6 = _a.sent();
+                console.error(error_6);
+                alert("Erreur lors du like.");
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+loadComments();
+(_c = document.getElementById("logoutBtn")) === null || _c === void 0 ? void 0 : _c.addEventListener("click", function () {
     localStorage.removeItem("token");
     alert("Vous avez été déconnecté.");
     window.location.href = "login.html";
 });
-(_c = document.getElementById("backToMapBtn")) === null || _c === void 0 ? void 0 : _c.addEventListener("click", function () {
+(_d = document.getElementById("backToMapBtn")) === null || _d === void 0 ? void 0 : _d.addEventListener("click", function () {
     window.location.href = "geoloc.html";
 });
 initializeMap();

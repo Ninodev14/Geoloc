@@ -33,6 +33,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   profileImage: { type: String, required: false },
   isAdmin: { type: Boolean, default: false },
+  foundCount: { type: Number, default: 0 },
 });
 
 const GeocacheSchema = new mongoose.Schema({
@@ -48,6 +49,7 @@ const GeocacheSchema = new mongoose.Schema({
   },
   password: { type: String, required: false },
   validatedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  likes: [{ type: [mongoose.Schema.Types.ObjectId], default: [], ref: "User" }],
 });
 
 const CommentSchema = new mongoose.Schema({
@@ -751,29 +753,36 @@ app.get("/validated-geocaches", authMiddleware, async (req, res) => {
  *         description: Erreur lors de la validation de la géocache
  */
 app.post("/validate-geocache/:id", authMiddleware, async (req, res) => {
-  const { id } = req.params;
-  const { password } = req.body;
-  const userId = req.user.userId;
+  try {
+    const { id } = req.params;
+    const { password } = req.body;
+    const userId = req.user.userId;
 
-  const geocache = await Geocache.findById(id);
-  if (!geocache) {
-    return res.status(404).json({ error: "Géocache non trouvée." });
+    const geocache = await Geocache.findById(id);
+    if (!geocache) {
+      return res.status(404).json({ error: "Géocache non trouvée." });
+    }
+
+    if (geocache.password && geocache.password !== password) {
+      return res.status(400).json({ error: "Code incorrect." });
+    }
+
+    if (geocache.validatedBy.includes(userId)) {
+      return res
+        .status(400)
+        .json({ error: "Vous avez déjà validé cette géocache." });
+    }
+
+    geocache.validatedBy.push(userId);
+    await geocache.save();
+
+    await User.findByIdAndUpdate(userId, { $inc: { foundCount: 1 } });
+
+    res.json({ message: "Géocache validée avec succès." });
+  } catch (error) {
+    console.error("Erreur lors de la validation :", error);
+    res.status(500).json({ error: "Erreur serveur." });
   }
-
-  if (geocache.password && geocache.password !== password) {
-    return res.status(400).json({ error: "Code incorrect." });
-  }
-
-  if (geocache.validatedBy.includes(userId)) {
-    return res
-      .status(400)
-      .json({ error: "Vous avez déjà validé cette géocache." });
-  }
-
-  geocache.validatedBy.push(userId);
-  await geocache.save();
-
-  res.json({ message: "Géocache validée avec succès." });
 });
 
 /**
@@ -843,6 +852,38 @@ app.post(
   }
 );
 
+// Route pour liker une géocache
+app.post("/geocache/:id/like", async (req, res) => {
+  const geocacheId = req.params.id;
+  const userId = req.userId; // Assure-toi d'ajouter l'userId à partir du token JWT
+
+  try {
+    const geocache = await Geocache.findById(geocacheId);
+    if (!geocache) {
+      return res.status(404).json({ message: "Géocache introuvable" });
+    }
+
+    // Vérifie si l'utilisateur a déjà liké cette géocache
+    if (geocache.likes.includes(userId)) {
+      return res
+        .status(400)
+        .json({ message: "Vous avez déjà aimé cette géocache." });
+    }
+
+    // Ajoute l'utilisateur aux likes
+    geocache.likes.push(userId);
+    await geocache.save();
+
+    res.status(200).json({
+      message: "Géocache aimée avec succès",
+      likes: geocache.likes.length,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur lors du like de la géocache." });
+  }
+});
+
 /**
  * @openapi
  * /comment/{geocacheId}:
@@ -883,10 +924,10 @@ app.get("/rankings", authMiddleware, async (req, res) => {
       {
         $project: {
           username: 1,
-          foundGeocaches: { $size: { $ifNull: ["$validatedGeocaches", []] } },
+          foundCount: 1,
         },
       },
-      { $sort: { foundGeocaches: -1 } },
+      { $sort: { foundCount: -1 } },
       { $limit: 10 },
     ]);
 
@@ -900,13 +941,40 @@ app.get("/rankings", authMiddleware, async (req, res) => {
       { $sort: { foundCount: -1 } },
       { $limit: 10 },
     ]);
-
     res.json({ userRankings, geocacheRankings });
   } catch (error) {
     console.error("Erreur lors du chargement du classement:", error);
     res
       .status(500)
       .json({ message: "Erreur interne du serveur", error: error.message });
+  }
+});
+
+app.get("/most-popular-geocaches", async (req, res) => {
+  try {
+    const mostLikedGeocaches = await Geocache.aggregate([
+      {
+        $project: {
+          name: 1,
+          description: 1,
+          totalLikes: { $size: { $ifNull: ["$likes", []] } },
+        },
+      },
+      { $sort: { totalLikes: -1 } },
+      { $limit: 10 },
+    ]);
+
+    if (mostLikedGeocaches.length === 0) {
+      return res.json([]);
+    }
+
+    res.json(mostLikedGeocaches);
+  } catch (error) {
+    console.error(
+      "Erreur lors de la récupération des géocaches populaires :",
+      error
+    );
+    res.status(500).json({ error: "Erreur serveur.", details: error.message });
   }
 });
 

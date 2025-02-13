@@ -6,6 +6,7 @@ interface Geocache {
     description: string;
     difficulty: number;
     creator: string;
+    likes: string[];
   };
 }
 
@@ -16,6 +17,17 @@ interface Comment {
   };
   image?: string;
 }
+const getCurrentUserId = (token: string | null): string | null => {
+  if (!token) return null;
+
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.userId;
+  } catch (error) {
+    console.error("Erreur lors du décodage du token", error);
+    return null;
+  }
+};
 
 let map: L.Map | undefined;
 const geocacheId: string | null = new URLSearchParams(
@@ -71,6 +83,11 @@ const initializeMap = async (): Promise<void> => {
         Créée par: ${geocache.geocache.creator}
     `);
 
+    const likeButton = document.getElementById("like-geocache-btn");
+    if (likeButton && geocache.geocache.likes) {
+      likeButton.innerHTML = `❤️ Aimer la Géocache (${geocache.geocache.likes.length})`;
+    }
+
     loadComments();
   } catch (error) {
     console.error(error);
@@ -123,7 +140,7 @@ document
     }
   });
 
-const loadComments = async (): Promise<void> => {
+const loadComments = async () => {
   const commentsList = document.getElementById("comments-list");
   if (!commentsList) return;
 
@@ -131,8 +148,7 @@ const loadComments = async (): Promise<void> => {
 
   try {
     const token = localStorage.getItem("token");
-    if (!token)
-      throw new Error("Vous devez être connecté pour voir les commentaires.");
+    if (!token) throw new Error("Vous devez être connecté.");
 
     const response = await fetch(
       `http://localhost:5000/comment/${geocacheId}`,
@@ -141,33 +157,124 @@ const loadComments = async (): Promise<void> => {
       }
     );
 
-    if (!response.ok)
-      throw new Error("Erreur lors du chargement des commentaires.");
+    if (!response.ok) throw new Error("Erreur de chargement des commentaires.");
 
-    const data: { comments: Comment[] } = await response.json();
+    const data = await response.json();
 
     commentsList.innerHTML = data.comments.length
       ? data.comments
           .map(
-            (comment) => `
-            <div class="comment">
+            (comment) => ` 
+            <div class="comment" data-id="${comment._id}">
               <p><strong>${comment.creator.username || "Anonyme"}</strong>: ${
               comment.text
             }</p>
               ${
                 comment.image
-                  ? `<img src="http://localhost:5000${comment.image}" alt="Image du commentaire" style="max-width: 200px; margin-top: 5px;"/>`
+                  ? `<img src="http://localhost:5000${comment.image}" style="max-width: 200px;"/>`
                   : ""
               }
             </div>`
           )
           .join("")
-      : "<p>Aucun commentaire pour cette géocache.</p>";
+      : "<p>Aucun commentaire.</p>";
   } catch (error) {
     console.error(error);
     commentsList.innerHTML = "<p>Impossible de charger les commentaires.</p>";
   }
 };
+
+document
+  .getElementById("like-geocache-btn")
+  ?.addEventListener("click", async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token)
+        throw new Error("Vous devez être connecté pour aimer cette géocache.");
+
+      const currentUserId = getCurrentUserId(token);
+
+      if (!currentUserId)
+        throw new Error("Impossible de récupérer l'ID de l'utilisateur.");
+
+      const response = await fetch(
+        `http://localhost:5000/geocache/${geocacheId}/like`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: currentUserId }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        console.error("Error details:", errorResponse);
+        throw new Error(
+          errorResponse.message || "Erreur lors de l'ajout du like."
+        );
+      }
+
+      alert("Vous avez aimé cette géocache !");
+
+      updateLikeCount();
+    } catch (error) {
+      console.error(error);
+      alert((error as Error).message);
+    }
+  });
+
+const updateLikeCount = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("Vous devez être connecté.");
+
+    const response = await fetch(
+      `http://localhost:5000/geocache/${geocacheId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    if (!response.ok) throw new Error("Erreur de récupération des données.");
+
+    const geocache: Geocache = await response.json();
+
+    const likeButton = document.getElementById("like-geocache-btn");
+    if (likeButton && geocache.geocache.likes) {
+      likeButton.innerHTML = `❤️ Aimer la Géocache (${geocache.geocache.likes.length})`;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const likeComment = async (commentId, btn) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("Vous devez être connecté.");
+
+    const response = await fetch(
+      `http://localhost:5000/comment/${commentId}/like`,
+      {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    if (!response.ok) throw new Error("Erreur lors du like.");
+
+    const currentLikes = btn.querySelector("span");
+    currentLikes.textContent = parseInt(currentLikes.textContent) + 1;
+  } catch (error) {
+    console.error(error);
+    alert("Erreur lors du like.");
+  }
+};
+
+loadComments();
 
 document.getElementById("logoutBtn")?.addEventListener("click", () => {
   localStorage.removeItem("token");

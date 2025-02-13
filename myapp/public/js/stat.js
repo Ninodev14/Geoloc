@@ -87,4 +87,44 @@ var displayRankings = function (userRankings, geocacheRankings) {
             .join("");
     }
 };
+var loadMostPopularGeocache = function () { return __awaiter(_this, void 0, void 0, function () {
+    var response, geocaches, popularContainer, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, fetch("http://localhost:5000/most-popular-geocaches")];
+            case 1:
+                response = _a.sent();
+                if (!response.ok) {
+                    throw new Error("Erreur lors de la récupération des géocaches populaires.");
+                }
+                return [4 /*yield*/, response.json()];
+            case 2:
+                geocaches = _a.sent();
+                console.log("Réponse API côté frontend :", geocaches);
+                popularContainer = document.getElementById("popular-geocache");
+                if (!popularContainer)
+                    return [2 /*return*/];
+                if (!geocaches || geocaches.length === 0) {
+                    popularContainer.innerHTML = "<p>Aucune géocache populaire trouvée.</p>";
+                }
+                else {
+                    popularContainer.innerHTML = "\n        <h3>\uD83C\uDFC6 Top 10 des G\u00E9ocaches les plus populaires</h3>\n        <ul>\n          ".concat(geocaches
+                        .map(function (geo, index) {
+                        var _a;
+                        return "\n                <li>\n                  <strong>#".concat(index + 1, " ").concat(geo.name || "Nom inconnu", "</strong> - \n                  ").concat(geo.description || "Pas de description disponible", " - \n                  \u2764\uFE0F ").concat((_a = geo.totalLikes) !== null && _a !== void 0 ? _a : 0, " likes\n                </li>\n              ");
+                    })
+                        .join(""), "\n        </ul>\n      ");
+                }
+                return [3 /*break*/, 4];
+            case 3:
+                error_2 = _a.sent();
+                console.error(error_2);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+loadMostPopularGeocache();
 document.addEventListener("DOMContentLoaded", fetchRankings);

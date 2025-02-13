@@ -64,4 +64,49 @@ const displayRankings = (
   }
 };
 
+const loadMostPopularGeocache = async () => {
+  try {
+    const response = await fetch(
+      "http://localhost:5000/most-popular-geocaches"
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "Erreur lors de la récupération des géocaches populaires."
+      );
+    }
+
+    const geocaches = await response.json();
+    console.log("Réponse API côté frontend :", geocaches);
+
+    const popularContainer = document.getElementById("popular-geocache");
+    if (!popularContainer) return;
+
+    if (!geocaches || geocaches.length === 0) {
+      popularContainer.innerHTML = "<p>Aucune géocache populaire trouvée.</p>";
+    } else {
+      popularContainer.innerHTML = `
+        <h3>🏆 Top 10 des Géocaches les plus populaires</h3>
+        <ul>
+          ${geocaches
+            .map(
+              (geo, index) => `
+                <li>
+                  <strong>#${index + 1} ${geo.name || "Nom inconnu"}</strong> - 
+                  ${geo.description || "Pas de description disponible"} - 
+                  ❤️ ${geo.totalLikes ?? 0} likes
+                </li>
+              `
+            )
+            .join("")}
+        </ul>
+      `;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+loadMostPopularGeocache();
+
 document.addEventListener("DOMContentLoaded", fetchRankings);
