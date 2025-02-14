@@ -823,6 +823,7 @@ app.post(
   authMiddleware,
   upload.single("image"),
   async (req, res) => {
+    console.log("Fichier reçu :", req.file);
     try {
       const { text } = req.body;
       const geocacheId = req.params.geocacheId;
