@@ -222,7 +222,6 @@ var loadComments = function () { return __awaiter(_this, void 0, void 0, functio
                 console.error("Error details:", errorResponse);
                 throw new Error(errorResponse.message || "Erreur lors de l'ajout du like.");
             case 3:
-                alert("Vous avez aimé cette géocache !");
                 updateLikeCount();
                 return [3 /*break*/, 5];
             case 4:

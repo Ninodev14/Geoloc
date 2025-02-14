@@ -217,8 +217,6 @@ document
         );
       }
 
-      alert("Vous avez aimé cette géocache !");
-
       updateLikeCount();
     } catch (error) {
       console.error(error);
