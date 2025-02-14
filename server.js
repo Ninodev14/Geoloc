@@ -223,7 +223,7 @@ app.get("/profile", authMiddleware, async (req, res) => {
         username: user.username,
         email: user.email,
         profileImage: user.profileImage
-          ? `uploads/${path.basename(user.profileImage)}`
+          ? `public/uploads/${path.basename(user.profileImage)}`
           : null,
         isAdmin: user.isAdmin,
       },
@@ -836,7 +836,7 @@ app.post(
         return res.status(401).json({ error: "Utilisateur non authentifié" });
       }
 
-      const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+      const imageUrl = req.file ? `public/uploads/${req.file.filename}` : null;
 
       const newComment = new Comment({
         text,
