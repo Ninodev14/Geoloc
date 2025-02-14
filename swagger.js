@@ -23,7 +23,7 @@ const swaggerSetup = (app) => {
 };
 
 const saveDocs = () => {
-  const docDir = path.join(__dirname, "../doc"); // Assurez-vous que le chemin est correct
+  const docDir = path.join(__dirname, "/doc"); // Assurez-vous que le chemin est correct
   if (!fs.existsSync(docDir)) {
     fs.mkdirSync(docDir, { recursive: true });
   }
