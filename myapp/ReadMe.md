@@ -1,8 +1,8 @@
-# Jeu de Géocaching - Galéo
+# Jeu de Géocaching - Galieo
 
 ## Description
 
-Galéo est un jeu de géocaching où les participants utilisent des coordonnées géographiques pour trouver des trésors cachés à travers le monde. Chaque cache est une aventure qui combine exploration en plein air et résolution d'énigmes.
+Galieo est un jeu de géocaching où les participants utilisent des coordonnées géographiques pour trouver des trésors cachés à travers le monde. Chaque cache est une aventure qui combine exploration en plein air et résolution d'énigmes.
 
 ## Table des matières
 
@@ -22,7 +22,7 @@ Galéo est un jeu de géocaching où les participants utilisent des coordonnées
 
 ### Étapes d'installation
 
-1. Rendez-vous sur le site web de Galéo.
+1. Rendez-vous sur le site web de Galieo.
 2. Créez-vous un compte en suivant les instructions sur le site !
 
 ## Comment jouer
