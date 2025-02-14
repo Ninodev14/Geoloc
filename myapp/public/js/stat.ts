@@ -86,7 +86,6 @@ const loadMostPopularGeocache = async () => {
       popularContainer.innerHTML = "<p>Aucune géocache populaire trouvée.</p>";
     } else {
       popularContainer.innerHTML = `
-        <h3>🏆 Top 10 des Géocaches les plus populaires</h3>
         <ul>
           ${geocaches
             .map(

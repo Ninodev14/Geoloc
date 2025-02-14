@@ -3,68 +3,86 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Créer une Géocache</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        max-width: 400px;
-        margin: 20px auto;
-        text-align: center;
-      }
-      input,
-      select,
-      textarea,
-      button {
-        width: 100%;
-        padding: 10px;
-        margin: 10px 0;
-      }
-      button {
-        background-color: #28a745;
-        color: white;
-        border: none;
-        cursor: pointer;
-      }
-      input[readonly] {
-        background-color: #f0f0f0;
-      }
-    </style>
+    <title>Ajouter une Géocache</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
   </head>
 
-  <body>
-    <h1>Ajouter une Géocache</h1>
-
-    <form id="geocacheForm">
-      <label for="name">Nom de la géocache :</label>
-      <input type="text" id="name" required />
-
-      <label for="creator">Nom du créateur :</label>
-      <input type="text" id="creator" required readonly />
-
-      <label for="description">Description :</label>
-      <textarea id="description" rows="3" required></textarea>
-
-      <label for="latitude">Latitude :</label>
-      <input type="number" id="latitude" step="any" required />
-
-      <label for="longitude">Longitude :</label>
-      <input type="number" id="longitude" step="any" required />
-
-      <label for="difficulty">Difficulté :</label>
-      <select id="difficulty" required>
-        <option value="Facile">Facile</option>
-        <option value="Moyen">Moyen</option>
-        <option value="Difficile">Difficile</option>
-      </select>
-
-      <label for="password">Mot de passe :</label>
-      <input type="text" id="password" required />
-
-      <button type="submit">Ajouter</button>
-    </form>
-
-    <p><a href="index.html">Retour à la carte</a></p>
+  <body
+    class="d-flex justify-content-center align-items-center vh-100 bg-light"
+  >
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4 bg-white p-4 rounded shadow">
+          <h2 class="text-center mb-4">Ajouter une Géocache</h2>
+          <form id="geocacheForm">
+            <div class="mb-3">
+              <label for="name" class="form-label">Nom de la géocache :</label>
+              <input type="text" id="name" class="form-control" required />
+            </div>
+            <div class="mb-3">
+              <label for="creator" class="form-label">Nom du créateur :</label>
+              <input
+                type="text"
+                id="creator"
+                class="form-control"
+                required
+                readonly
+              />
+            </div>
+            <div class="mb-3">
+              <label for="description" class="form-label">Description :</label>
+              <textarea
+                id="description"
+                class="form-control"
+                rows="3"
+                required
+              ></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="latitude" class="form-label">Latitude :</label>
+              <input
+                type="number"
+                id="latitude"
+                class="form-control"
+                step="any"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="longitude" class="form-label">Longitude :</label>
+              <input
+                type="number"
+                id="longitude"
+                class="form-control"
+                step="any"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="difficulty" class="form-label">Difficulté :</label>
+              <select id="difficulty" class="form-select" required>
+                <option value="Facile">Facile</option>
+                <option value="Moyen">Moyen</option>
+                <option value="Difficile">Difficile</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Mot de passe :</label>
+              <input type="text" id="password" class="form-control" required />
+            </div>
+            <button type="submit" class="btn btn-success w-100">Ajouter</button>
+          </form>
+          <p class="mt-3 text-center">
+            <a href="geoloc.html">Retour à la carte</a>
+          </p>
+        </div>
+      </div>
+    </div>
 
     <script src="js/creatGeoloc.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

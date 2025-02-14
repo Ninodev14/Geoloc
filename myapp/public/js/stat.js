@@ -110,7 +110,7 @@ var loadMostPopularGeocache = function () { return __awaiter(_this, void 0, void
                     popularContainer.innerHTML = "<p>Aucune géocache populaire trouvée.</p>";
                 }
                 else {
-                    popularContainer.innerHTML = "\n        <h3>\uD83C\uDFC6 Top 10 des G\u00E9ocaches les plus populaires</h3>\n        <ul>\n          ".concat(geocaches
+                    popularContainer.innerHTML = "\n        <ul>\n          ".concat(geocaches
                         .map(function (geo, index) {
                         var _a;
                         return "\n                <li>\n                  <strong>#".concat(index + 1, " ").concat(geo.name || "Nom inconnu", "</strong> - \n                  ").concat(geo.description || "Pas de description disponible", " - \n                  \u2764\uFE0F ").concat((_a = geo.totalLikes) !== null && _a !== void 0 ? _a : 0, " likes\n                </li>\n              ");
