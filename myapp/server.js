@@ -25,7 +25,13 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-mongoose.connect("mongodb://localhost:27017/auth-system");
+const dbURI =
+  "mongodb+srv://ninolefort:DPxm6cNMkQ2fj2d5@cluster0.exhkx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
+mongoose
+  .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("Connected to MongoDB Atlas"))
+  .catch((err) => console.log("Connection error", err));
 
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
