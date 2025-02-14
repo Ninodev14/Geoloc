@@ -18,30 +18,32 @@
     <style>
       #map {
         height: 100vh;
-        width: 100%;
+        width: 100vw;
         transition: all 0.3s ease;
       }
 
       .full-screen-map {
         height: 100vh;
-        width: 100vw;
         position: absolute;
         top: 0;
         left: 0;
-        z-index: 1000;
+      }
+
+      .full-screen-left-column {
+        width: 0 !important;
+        overflow: hidden;
+        padding: 0 !important;
       }
     </style>
   </head>
 
   <body class="d-flex p-0 m-0">
     <div class="container-fluid d-flex p-0 m-0">
+      <div
+        class="col-md-3 col-12 p-3"
+        style="height: 100vh; overflow-y: auto; transition: all 0.3s ease"
       >
-      <div class="col-md-3 col-12 p-3" style="height: 100vh; overflow-y: auto">
         <h1 class="h4">Page de Géolocalisation</h1>
-        <!-- Ajouter ce bouton juste après le titre -->
-        <button id="toggleMapSizeBtn" class="btn btn-primary mt-3">
-          <i class="bi bi-arrow-expand"></i> Agrandir la carte
-        </button>
 
         <button class="btn btn-danger" id="logoutBtn">Se déconnecter</button>
 
@@ -72,6 +74,14 @@
       </div>
 
       <div class="col-md-9 col-12 p-0">
+        <button
+          id="toggleMapSizeBtn"
+          class="btn btn-primary mt-3"
+          style="z-index: 1000; position: absolute; top: 0; right: 0"
+        >
+          <i class="bi bi-arrow-expand"></i> Agrandir la carte
+        </button>
+
         <div id="map"></div>
       </div>
     </div>
