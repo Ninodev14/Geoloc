@@ -17,11 +17,14 @@ const fetchRankings = async (): Promise<void> => {
       return;
     }
 
-    const response = await fetch("http://localhost:5000/rankings", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      "https://galio-a9c7f612fd32.herokuapp.com/rankings",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Erreur lors du chargement du classement.");
@@ -67,7 +70,7 @@ const displayRankings = (
 const loadMostPopularGeocache = async () => {
   try {
     const response = await fetch(
-      "http://localhost:5000/most-popular-geocaches"
+      "https://galio-a9c7f612fd32.herokuapp.com/most-popular-geocaches"
     );
 
     if (!response.ok) {

@@ -22,11 +22,14 @@ document
     const password = passwordInput.value;
 
     try {
-      const response = await fetch("http://localhost:5000/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        "https://galio-a9c7f612fd32.herokuapp.com/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const data: { token?: string; error?: string } = await response.json();
 

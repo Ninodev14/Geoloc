@@ -85,11 +85,14 @@ const getUserData = async (): Promise<void> => {
       return;
     }
 
-    const response = await fetch("http://localhost:5000/profile", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      "https://galio-a9c7f612fd32.herokuapp.com/profile",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error(
@@ -104,7 +107,7 @@ const getUserData = async (): Promise<void> => {
     if (userData.profileImage) {
       (
         document.getElementById("profile-image") as HTMLImageElement
-      ).src = `http://localhost:5000/${userData.profileImage}`;
+      ).src = `https://galio-a9c7f612fd32.herokuapp.com/${userData.profileImage}`;
     }
 
     loadGeocaches();
@@ -118,7 +121,9 @@ const getUserData = async (): Promise<void> => {
 
 const loadGeocaches = async (): Promise<void> => {
   try {
-    const response = await fetch("http://localhost:5000/geocache");
+    const response = await fetch(
+      "https://galio-a9c7f612fd32.herokuapp.com/geocache"
+    );
     if (!response.ok) {
       throw new Error("Erreur lors du chargement des géocaches.");
     }
@@ -139,7 +144,7 @@ const loadGeocaches = async (): Promise<void> => {
 
     if (token) {
       const validationResponse = await fetch(
-        "http://localhost:5000/validated-geocaches",
+        "https://galio-a9c7f612fd32.herokuapp.com/validated-geocaches",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -244,10 +249,13 @@ const loadGeocaches = async (): Promise<void> => {
             );
             if (confirmed) {
               const token = localStorage.getItem("token");
-              await fetch(`http://localhost:5000/geocache/${geo._id}`, {
-                method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` },
-              });
+              await fetch(
+                `https://galio-a9c7f612fd32.herokuapp.com/geocache/${geo._id}`,
+                {
+                  method: "DELETE",
+                  headers: { Authorization: `Bearer ${token}` },
+                }
+              );
               alert("Géocache supprimée avec succès.");
               location.reload();
             }
@@ -270,7 +278,7 @@ const validateGeocache = async (geocacheId, code, marker) => {
   try {
     const token = localStorage.getItem("token");
     const response = await fetch(
-      `http://localhost:5000/validate-geocache/${geocacheId}`,
+      `https://galio-a9c7f612fd32.herokuapp.com/validate-geocache/${geocacheId}`,
       {
         method: "POST",
         headers: {
@@ -324,7 +332,9 @@ const loadComments = async (geocacheId: string) => {
   const commentsList = document.getElementById("comments-list");
   if (!commentsList) return;
 
-  const response = await fetch(`http://localhost:5000/comment/${geocacheId}`);
+  const response = await fetch(
+    `https://galio-a9c7f612fd32.herokuapp.com/comment/${geocacheId}`
+  );
   const data = await response.json();
 
   commentsList.innerHTML = data.comments
@@ -347,17 +357,20 @@ document
     ).value;
     const token = localStorage.getItem("token");
 
-    const response = await fetch("http://localhost:5000/comment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        geocacheId: selectedGeocacheId,
-        text: commentText,
-      }),
-    });
+    const response = await fetch(
+      "https://galio-a9c7f612fd32.herokuapp.com/comment",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          geocacheId: selectedGeocacheId,
+          text: commentText,
+        }),
+      }
+    );
 
     if (response.ok) {
       loadComments(selectedGeocacheId);

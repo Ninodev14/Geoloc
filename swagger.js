@@ -3,6 +3,11 @@ const fs = require("fs");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
+const serverUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://galio-a9c7f612fd32.herokuapp.com"
+    : "http://localhost:5000";
+
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -11,7 +16,7 @@ const options = {
       version: "1.0.0",
       description: "Documentation de l'API REST avec Swagger",
     },
-    servers: [{ url: "http://localhost:5000" }],
+    servers: [{ url: serverUrl }],
   },
   apis: ["server.js"],
 };

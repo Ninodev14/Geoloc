@@ -55,7 +55,7 @@ var _this = this;
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 4, , 5]);
-                return [4 /*yield*/, fetch("http://localhost:5000/login", {
+                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/login", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ email: email, password: password }),

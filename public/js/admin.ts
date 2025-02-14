@@ -8,12 +8,15 @@ const checkAuthentication = async (): Promise<void> => {
   }
 
   try {
-    const response: Response = await fetch("http://localhost:5000/profile", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response: Response = await fetch(
+      "https://galio-a9c7f612fd32.herokuapp.com/profile",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     const data: {
       user?: { username: string; profileImage?: string; isAdmin?: boolean };
@@ -33,7 +36,7 @@ const checkAuthentication = async (): Promise<void> => {
 };
 
 const fetchUsers = (token: string) => {
-  fetch("http://localhost:5000/admin/user", {
+  fetch("https://galio-a9c7f612fd32.herokuapp.com/admin/user", {
     headers: { Authorization: `Bearer ${token}` },
   })
     .then((res) => res.json())
@@ -70,7 +73,7 @@ const makeAdmin = (email) => {
   const token = getToken();
   if (!token) return;
 
-  fetch("http://localhost:5000/make-admin", {
+  fetch("https://galio-a9c7f612fd32.herokuapp.com/make-admin", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -86,7 +89,7 @@ const editUser = (email) => {
   if (!newUsername) return;
 
   const token = getToken();
-  fetch("http://localhost:5000/edit-user", {
+  fetch("https://galio-a9c7f612fd32.herokuapp.com/edit-user", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -102,7 +105,7 @@ const deleteUser = (email) => {
   const token = getToken();
   if (!token) return;
 
-  fetch("http://localhost:5000/delete-user", {
+  fetch("https://galio-a9c7f612fd32.herokuapp.com/delete-user", {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

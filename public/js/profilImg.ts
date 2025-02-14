@@ -19,12 +19,15 @@ const checkAuthentication = async (): Promise<void> => {
   }
 
   try {
-    const response: Response = await fetch("http://localhost:5000/profile", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response: Response = await fetch(
+      "https://galio-a9c7f612fd32.herokuapp.com/profile",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     const data: {
       user?: { username: string; profileImage?: string };
@@ -41,7 +44,7 @@ const checkAuthentication = async (): Promise<void> => {
         usernameElement.textContent = data.user.username;
       }
       if (profileImageElement && data.user.profileImage) {
-        profileImageElement.src = `http://localhost:5000/${data.user.profileImage}`;
+        profileImageElement.src = `https://galio-a9c7f612fd32.herokuapp.com/${data.user.profileImage}`;
       }
     } else {
       console.error("Erreur lors de la récupération du profil :", data.error);

@@ -47,7 +47,7 @@ var getUserData = function () { return __awaiter(_this, void 0, void 0, function
                     console.error("Aucun token trouvé dans le localStorage.");
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, fetch("http://localhost:5000/profile", {
+                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/profile", {
                         headers: {
                             Authorization: "Bearer ".concat(token),
                         },
@@ -89,12 +89,12 @@ getUserData();
                     longitude: parseFloat(document.getElementById("longitude").value),
                     difficulty: document.getElementById("difficulty")
                         .value,
-                    password: document.getElementById("password").value, // Ajout du mot de passe
+                    password: document.getElementById("password").value,
                 };
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, fetch("http://localhost:5000/geocache", {
+                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/geocache", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",

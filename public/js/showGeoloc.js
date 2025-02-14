@@ -119,7 +119,7 @@ var getUserData = function () { return __awaiter(_this, void 0, void 0, function
                     console.error("Aucun token trouvé.");
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, fetch("http://localhost:5000/profile", {
+                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/profile", {
                         headers: {
                             Authorization: "Bearer ".concat(token),
                         },
@@ -135,7 +135,7 @@ var getUserData = function () { return __awaiter(_this, void 0, void 0, function
                 userData = data.user;
                 document.getElementById("username").textContent = userData.username;
                 if (userData.profileImage) {
-                    document.getElementById("profile-image").src = "http://localhost:5000/".concat(userData.profileImage);
+                    document.getElementById("profile-image").src = "https://galio-a9c7f612fd32.herokuapp.com/".concat(userData.profileImage);
                 }
                 loadGeocaches();
                 return [3 /*break*/, 4];
@@ -154,7 +154,7 @@ var loadGeocaches = function () { return __awaiter(_this, void 0, void 0, functi
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 7, , 8]);
-                return [4 /*yield*/, fetch("http://localhost:5000/geocache")];
+                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/geocache")];
             case 1:
                 response = _a.sent();
                 if (!response.ok) {
@@ -166,7 +166,7 @@ var loadGeocaches = function () { return __awaiter(_this, void 0, void 0, functi
                 token = localStorage.getItem("token");
                 validatedGeocaches_1 = [];
                 if (!token) return [3 /*break*/, 5];
-                return [4 /*yield*/, fetch("http://localhost:5000/validated-geocaches", {
+                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/validated-geocaches", {
                         headers: {
                             Authorization: "Bearer ".concat(token),
                         },
@@ -244,7 +244,7 @@ var loadGeocaches = function () { return __awaiter(_this, void 0, void 0, functi
                                             confirmed = confirm("Êtes-vous sûr de vouloir supprimer cette géocache ?");
                                             if (!confirmed) return [3 /*break*/, 2];
                                             token_1 = localStorage.getItem("token");
-                                            return [4 /*yield*/, fetch("http://localhost:5000/geocache/".concat(geo._id), {
+                                            return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/geocache/".concat(geo._id), {
                                                     method: "DELETE",
                                                     headers: { Authorization: "Bearer ".concat(token_1) },
                                                 })];
@@ -281,7 +281,7 @@ var validateGeocache = function (geocacheId, code, marker) { return __awaiter(_t
             case 0:
                 _a.trys.push([0, 3, , 4]);
                 token = localStorage.getItem("token");
-                return [4 /*yield*/, fetch("http://localhost:5000/validate-geocache/".concat(geocacheId), {
+                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/validate-geocache/".concat(geocacheId), {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -332,7 +332,7 @@ var loadComments = function (geocacheId) { return __awaiter(_this, void 0, void 
                 commentsList = document.getElementById("comments-list");
                 if (!commentsList)
                     return [2 /*return*/];
-                return [4 /*yield*/, fetch("http://localhost:5000/comment/".concat(geocacheId))];
+                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/comment/".concat(geocacheId))];
             case 1:
                 response = _a.sent();
                 return [4 /*yield*/, response.json()];
@@ -357,7 +357,7 @@ var loadComments = function (geocacheId) { return __awaiter(_this, void 0, void 
                     return [2 /*return*/];
                 commentText = document.getElementById("comment-text").value;
                 token = localStorage.getItem("token");
-                return [4 /*yield*/, fetch("http://localhost:5000/comment", {
+                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/comment", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",

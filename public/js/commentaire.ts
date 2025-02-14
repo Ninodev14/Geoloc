@@ -49,7 +49,7 @@ const initializeMap = async (): Promise<void> => {
     }
 
     const response = await fetch(
-      `http://localhost:5000/geocache/${geocacheId}`,
+      `https://galio-a9c7f612fd32.herokuapp.com/geocache/${geocacheId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -119,7 +119,7 @@ document
       if (commentImage) formData.append("image", commentImage);
 
       const response = await fetch(
-        `http://localhost:5000/comment/${geocacheId}`,
+        `https://galio-a9c7f612fd32.herokuapp.com/comment/${geocacheId}`,
         {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },
@@ -151,7 +151,7 @@ const loadComments = async () => {
     if (!token) throw new Error("Vous devez être connecté.");
 
     const response = await fetch(
-      `http://localhost:5000/comment/${geocacheId}`,
+      `https://galio-a9c7f612fd32.herokuapp.com/comment/${geocacheId}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -198,7 +198,7 @@ document
         throw new Error("Impossible de récupérer l'ID de l'utilisateur.");
 
       const response = await fetch(
-        `http://localhost:5000/geocache/${geocacheId}/like`,
+        `https://galio-a9c7f612fd32.herokuapp.com/geocache/${geocacheId}/like`,
         {
           method: "POST",
           headers: {
@@ -230,7 +230,7 @@ const updateLikeCount = async () => {
     if (!token) throw new Error("Vous devez être connecté.");
 
     const response = await fetch(
-      `http://localhost:5000/geocache/${geocacheId}`,
+      `https://galio-a9c7f612fd32.herokuapp.com/geocache/${geocacheId}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -255,7 +255,7 @@ const likeComment = async (commentId, btn) => {
     if (!token) throw new Error("Vous devez être connecté.");
 
     const response = await fetch(
-      `http://localhost:5000/comment/${commentId}/like`,
+      `https://galio-a9c7f612fd32.herokuapp.com/comment/${commentId}/like`,
       {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },

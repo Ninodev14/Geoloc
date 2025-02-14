@@ -6,11 +6,14 @@ const getUserData = async (): Promise<void> => {
       return;
     }
 
-    const response = await fetch("http://localhost:5000/profile", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      "https://galio-a9c7f612fd32.herokuapp.com/profile",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error(
@@ -56,13 +59,16 @@ document
     };
 
     try {
-      const response = await fetch("http://localhost:5000/geocache", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(geocache),
-      });
+      const response = await fetch(
+        "https://galio-a9c7f612fd32.herokuapp.com/geocache",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(geocache),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Erreur lors de l'ajout de la géocache.");

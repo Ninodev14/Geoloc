@@ -50,7 +50,7 @@ var fetchProfile = function () { return __awaiter(_this, void 0, void 0, functio
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 4, , 5]);
-                return [4 /*yield*/, fetch("http://localhost:5000/profile", {
+                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/profile", {
                         method: "GET",
                         headers: { Authorization: "Bearer ".concat(token) },
                     })];

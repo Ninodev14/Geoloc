@@ -7,7 +7,7 @@ const getGeocacheData = async (): Promise<void> => {
 
   try {
     const response = await fetch(
-      `http://localhost:5000/geocache/${geocacheId}`,
+      `https://galio-a9c7f612fd32.herokuapp.com/geocache/${geocacheId}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -71,7 +71,7 @@ document
 
     try {
       const response = await fetch(
-        `http://localhost:5000/geocache/${geocacheId}`,
+        `https://galio-a9c7f612fd32.herokuapp.com/geocache/${geocacheId}`,
         {
           method: "PUT",
           headers: {

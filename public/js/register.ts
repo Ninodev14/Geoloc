@@ -51,10 +51,13 @@ document
     formData.append("profileImage", imageFile);
 
     try {
-      const response = await fetch("http://localhost:5000/register", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "https://galio-a9c7f612fd32.herokuapp.com/register",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const data: RegisterResponse = await response.json();
       messageElement.textContent =
