@@ -44,6 +44,7 @@ const checkAuthentication = async (): Promise<void> => {
         usernameElement.textContent = data.user.username;
       }
       if (profileImageElement && data.user.profileImage) {
+        console.log(data.user.profileImage);
         profileImageElement.src = `https://galio-a9c7f612fd32.herokuapp.com/${data.user.profileImage}`;
       }
     } else {
