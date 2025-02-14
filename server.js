@@ -837,7 +837,7 @@ app.post(
         return res.status(401).json({ error: "Utilisateur non authentifié" });
       }
 
-      const imageUrl = req.file ? `public/uploads/${req.file.filename}` : null;
+      const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
       const newComment = new Comment({
         text,
