@@ -67,6 +67,9 @@ var fetchProfile = function () { return __awaiter(_this, void 0, void 0, functio
                         profileImageElement.src = data.user.profileImage;
                         profileImageElement.style.display = "block";
                     }
+                    if (data.user.isAdmin) {
+                        document.getElementById("adminBtn").style.display = "inline-block";
+                    }
                 }
                 else {
                     document.getElementById("username").textContent =
@@ -82,7 +85,6 @@ var fetchProfile = function () { return __awaiter(_this, void 0, void 0, functio
         }
     });
 }); };
-// Déconnexion
 (_a = document.getElementById("logoutBtn")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () {
     localStorage.removeItem("token");
     localStorage.removeItem("profileImage");
