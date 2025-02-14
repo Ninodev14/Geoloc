@@ -178,7 +178,7 @@ var loadComments = function () { return __awaiter(_this, void 0, void 0, functio
                 commentsList.innerHTML = data.comments.length
                     ? data.comments
                         .map(function (comment) { return " \n            <div class=\"comment\" data-id=\"".concat(comment._id, "\">\n              <p><strong>").concat(comment.creator.username || "Anonyme", "</strong>: ").concat(comment.text, "</p>\n              ").concat(comment.image
-                        ? "<img src=\"http://localhost:5000".concat(comment.image, "\" style=\"max-width: 200px;\"/>")
+                        ? "<img src=\"https://galio-a9c7f612fd32.herokuapp.com/".concat(comment.image, "\" style=\"max-width: 200px;\"/>")
                         : "", "\n            </div>"); })
                         .join("")
                     : "<p>Aucun commentaire.</p>";

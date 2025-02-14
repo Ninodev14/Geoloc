@@ -171,7 +171,7 @@ const loadComments = async () => {
             }</p>
               ${
                 comment.image
-                  ? `<img src="http://localhost:5000${comment.image}" style="max-width: 200px;"/>`
+                  ? `<img src="https://galio-a9c7f612fd32.herokuapp.com/${comment.image}" style="max-width: 200px;"/>`
                   : ""
               }
             </div>`
