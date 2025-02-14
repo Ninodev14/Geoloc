@@ -17,7 +17,12 @@ const fetchProfile = async () => {
     );
 
     const data: {
-      user?: { username?: string; email?: string; profileImage?: string };
+      user?: {
+        username?: string;
+        email?: string;
+        profileImage?: string;
+        isAdmin?: boolean;
+      };
       error?: string;
     } = await response.json();
 
@@ -36,6 +41,10 @@ const fetchProfile = async () => {
         profileImageElement.src = data.user.profileImage;
         profileImageElement.style.display = "block";
       }
+
+      if (data.user.isAdmin) {
+        document.getElementById("adminBtn")!.style.display = "inline-block";
+      }
     } else {
       document.getElementById("username")!.textContent =
         "Erreur lors de la récupération du profil.";
@@ -46,7 +55,6 @@ const fetchProfile = async () => {
   }
 };
 
-// Déconnexion
 document.getElementById("logoutBtn")?.addEventListener("click", () => {
   localStorage.removeItem("token");
   localStorage.removeItem("profileImage");
