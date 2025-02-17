@@ -45,11 +45,11 @@ var map;
 var selectedGeocacheId = null;
 var greenIcon = new L.Icon({
     iconUrl: "./img/valide.svg",
-    iconSize: [32, 32],
+    iconSize: [64, 64],
 });
 var defaultIcon = new L.Icon({
     iconUrl: "./img/unvalide.svg",
-    iconSize: [32, 32],
+    iconSize: [64, 64],
 });
 var distanceLimit = 10;
 var initializeMap = function () { return __awaiter(_this, void 0, void 0, function () {
@@ -70,7 +70,7 @@ var initializeMap = function () { return __awaiter(_this, void 0, void 0, functi
                 userMarker = L.marker(userLocation, {
                     icon: L.icon({
                         iconUrl: "./img/perso.svg",
-                        iconSize: [32, 32],
+                        iconSize: [64, 64],
                     }),
                 })
                     .addTo(map)
