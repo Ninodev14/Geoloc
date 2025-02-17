@@ -44,11 +44,11 @@ document.head.appendChild(leafletScript);
 var map;
 var selectedGeocacheId = null;
 var greenIcon = new L.Icon({
-    iconUrl: "https://cdn-icons-png.flaticon.com/512/252/252025.png",
+    iconUrl: "./img/valide.svg",
     iconSize: [32, 32],
 });
 var defaultIcon = new L.Icon({
-    iconUrl: "https://cdn-icons-png.flaticon.com/512/252/252032.png",
+    iconUrl: "./img/unvalide.svg",
     iconSize: [32, 32],
 });
 var distanceLimit = 10;
@@ -69,7 +69,7 @@ var initializeMap = function () { return __awaiter(_this, void 0, void 0, functi
                 userLocation = _a.sent();
                 userMarker = L.marker(userLocation, {
                     icon: L.icon({
-                        iconUrl: "https://cdn-icons-png.flaticon.com/512/64/64486.png",
+                        iconUrl: "./img/perso.svg",
                         iconSize: [32, 32],
                     }),
                 })

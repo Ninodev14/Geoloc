@@ -7,12 +7,12 @@ document.head.appendChild(leafletScript);
 let map: L.Map;
 let selectedGeocacheId: string | null = null;
 const greenIcon = new L.Icon({
-  iconUrl: "https://cdn-icons-png.flaticon.com/512/252/252025.png",
+  iconUrl: "./img/valide.svg",
   iconSize: [32, 32],
 });
 
 const defaultIcon = new L.Icon({
-  iconUrl: "https://cdn-icons-png.flaticon.com/512/252/252032.png",
+  iconUrl: "./img/unvalide.svg",
   iconSize: [32, 32],
 });
 
@@ -30,7 +30,7 @@ const initializeMap = async () => {
 
     userMarker = L.marker(userLocation, {
       icon: L.icon({
-        iconUrl: "https://cdn-icons-png.flaticon.com/512/64/64486.png",
+        iconUrl: "./img/perso.svg",
         iconSize: [32, 32],
       }),
     })
