@@ -29,7 +29,7 @@ const dbURI =
   "mongodb+srv://ninolefort:DPxm6cNMkQ2fj2d5@cluster0.exhkx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 mongoose
-  .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(dbURI)
   .then(() => console.log("Connected to MongoDB Atlas"))
   .catch((err) => console.log("Connection error", err));
 
