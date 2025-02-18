@@ -10,34 +10,34 @@
       rel="stylesheet"
     />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <style>
+      #map {
+        height: 60vh;
+        width: 100%;
+        border-radius: 8px;
+      }
+    </style>
   </head>
 
   <body class="bg-light">
     <div class="container py-5">
       <h1 class="text-center mb-4">Commentaires de la Géocache</h1>
 
-      <!-- Barre de navigation -->
       <div class="d-flex justify-content-between mb-4">
-        <button id="logoutBtn" class="btn btn-danger">Se déconnecter</button>
         <button id="backToMapBtn" class="btn btn-secondary">
           Retour à la carte
         </button>
-        <button id="like-geocache-btn" class="btn btn-warning">
+        <button id="like-geocache-btn" class="btn btn-success">
           Aimer la Géocache
         </button>
       </div>
 
-      <!-- Carte -->
-      <div id="map" class="mb-4" style="height: 500px"></div>
+      <div id="map" class="mb-4 shadow"></div>
 
-      <!-- Section des commentaires -->
       <div id="comments-section">
         <h3 class="mb-3">Commentaires</h3>
-        <div id="comments-list" class="mb-3">
-          <!-- Liste des commentaires -->
-        </div>
-
-        <!-- Formulaire de commentaire -->
+        <div id="comments-list" class="mb-3"></div>
         <div class="card p-3">
           <textarea
             id="comment-text"
