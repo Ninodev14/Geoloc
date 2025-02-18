@@ -12,32 +12,43 @@
 
   <body class="bg-light">
     <div class="container py-5">
-      <h2 class="text-center mb-4">Bienvenue sur votre profil</h2>
+      <div class="card p-4">
+        <!-- Centre l'image dans un conteneur avec d-flex et justify-content-center -->
+        <div class="d-flex justify-content-center">
+          <img
+            id="profileImage"
+            src=""
+            alt="Photo de profil"
+            class="img-fluid rounded-circle mb-3"
+            style="display: none; width: 150px; height: 150px"
+          />
+        </div>
 
-      <div class="text-center mb-4">
-        <img
-          id="profileImage"
-          src=""
-          alt="Photo de profil"
-          class="img-fluid rounded-circle"
-          style="display: none; width: 150px; height: 150px"
-        />
-      </div>
+        <h2 class="text-primary text-center" id="username"></h2>
+        <p id="email" class="fs-6 text-muted text-center"></p>
 
-      <div class="text-center">
-        <p id="username" class="fs-4"></p>
-        <p id="email" class="fs-6 text-muted"></p>
-      </div>
-
-      <div class="d-flex justify-content-center gap-3">
-        <a
-          id="adminBtn"
-          href="admin/user.html"
-          class="btn btn-info"
-          style="display: none"
-          >Admin</a
-        >
-        <button id="logoutBtn" class="btn btn-danger">Se déconnecter</button>
+        <div class="d-flex justify-content-center gap-3 mt-4">
+          <div class="text-center mt-4">
+            <a
+              id="adminBtn"
+              href="admin/user.html"
+              class="btn btn-info"
+              style="display: none"
+            >
+              Admin
+            </a>
+          </div>
+          <div class="text-center mt-4">
+            <button id="logoutBtn" class="btn btn-danger">
+              Se déconnecter
+            </button>
+          </div>
+          <div class="text-center mt-4">
+            <a href="geoloc.html" class="btn btn-outline-secondary">
+              <i class="bi bi-arrow-left"></i> Retour
+            </a>
+          </div>
+        </div>
       </div>
     </div>
 
