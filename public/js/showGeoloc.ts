@@ -8,12 +8,12 @@ let map: L.Map;
 let selectedGeocacheId: string | null = null;
 const greenIcon = new L.Icon({
   iconUrl: "./img/valide.svg",
-  iconSize: [64, 64],
+  iconSize: [40, 40],
 });
 
 const defaultIcon = new L.Icon({
   iconUrl: "./img/unvalide.svg",
-  iconSize: [64, 64],
+  iconSize: [40, 40],
 });
 
 let distanceLimit: number = 10;
@@ -31,7 +31,7 @@ const initializeMap = async () => {
     userMarker = L.marker(userLocation, {
       icon: L.icon({
         iconUrl: "./img/perso.svg",
-        iconSize: [64, 64],
+        iconSize: [40, 40],
       }),
     })
       .addTo(map)
