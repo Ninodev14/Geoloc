@@ -50,15 +50,24 @@ const fetchUsers = (token: string) => {
                 <td>${user.email}</td>
                 <td>${user.isAdmin ? "Admin" : "Utilisateur"}</td>
                 <td>
-                  <button onclick="editUser('${user.email}')">Modifier</button>
-                  ${
-                    !user.isAdmin
-                      ? `<button onclick="makeAdmin('${user.email}')">Promouvoir</button>`
-                      : ""
-                  }
-                  <button onclick="deleteUser('${
+                  <button class="btn btn-warning btn-sm" onclick="editUser('${
                     user.email
-                  }')">Supprimer</button>
+                  }')">
+  <i class="bi bi-pencil"></i> Modifier
+</button>
+
+${
+  !user.isAdmin
+    ? `<button class="btn btn-success btn-sm" onclick="makeAdmin('${user.email}')">
+         <i class="bi bi-arrow-up-circle"></i> Promouvoir
+       </button>`
+    : ""
+}
+
+<button class="btn btn-danger btn-sm" onclick="deleteUser('${user.email}')">
+  <i class="bi bi-trash"></i> Supprimer
+</button>
+
                 </td>
               `;
         tbody.appendChild(row);

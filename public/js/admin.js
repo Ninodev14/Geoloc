@@ -87,9 +87,9 @@ var fetchUsers = function (token) {
         tbody.innerHTML = "";
         data.users.forEach(function (user) {
             var row = document.createElement("tr");
-            row.innerHTML = "\n                <td>".concat(user.username, "</td>\n                <td>").concat(user.email, "</td>\n                <td>").concat(user.isAdmin ? "Admin" : "Utilisateur", "</td>\n                <td>\n                  <button onclick=\"editUser('").concat(user.email, "')\">Modifier</button>\n                  ").concat(!user.isAdmin
-                ? "<button onclick=\"makeAdmin('".concat(user.email, "')\">Promouvoir</button>")
-                : "", "\n                  <button onclick=\"deleteUser('").concat(user.email, "')\">Supprimer</button>\n                </td>\n              ");
+            row.innerHTML = "\n                <td>".concat(user.username, "</td>\n                <td>").concat(user.email, "</td>\n                <td>").concat(user.isAdmin ? "Admin" : "Utilisateur", "</td>\n                <td>\n                  <button class=\"btn btn-warning btn-sm\" onclick=\"editUser('").concat(user.email, "')\">\n  <i class=\"bi bi-pencil\"></i> Modifier\n</button>\n\n").concat(!user.isAdmin
+                ? "<button class=\"btn btn-success btn-sm\" onclick=\"makeAdmin('".concat(user.email, "')\">\n         <i class=\"bi bi-arrow-up-circle\"></i> Promouvoir\n       </button>")
+                : "", "\n\n<button class=\"btn btn-danger btn-sm\" onclick=\"deleteUser('").concat(user.email, "')\">\n  <i class=\"bi bi-trash\"></i> Supprimer\n</button>\n\n                </td>\n              ");
             tbody.appendChild(row);
         });
     })
