@@ -205,12 +205,12 @@ var loadGeocaches = function () { return __awaiter(_this, void 0, void 0, functi
                         validatedGeocaches_1.includes(geo._id);
                     var popupContent = "<b>".concat(geo.name, "</b><br>\n        Difficult\u00E9: ").concat(geo.difficulty, "<br>\n        Cr\u00E9\u00E9e par: ").concat(geo.creator, "<br>\n        Description: ").concat(geo.description, "<br>");
                     if (userData && (userData.username === geo.creator || userData.isAdmin)) {
-                        popupContent += " \n          <button class=\"editBtn\" data-id=\"".concat(geo._id, "\" style=\"margin-top: 10px;\">Modifier</button>\n          <button class=\"deleteBtn\" data-id=\"").concat(geo._id, "\" style=\"margin-top: 10px;\">Supprimer</button>\n        ");
+                        popupContent += " \n    <button class=\"btn btn-warning editBtn w-100 my-1\" data-id=\"".concat(geo._id, "\">\n      <i class=\"bi bi-pencil\"></i> Modifier\n    </button>\n    <button class=\"btn btn-danger deleteBtn w-100 my-1\" data-id=\"").concat(geo._id, "\">\n      <i class=\"bi bi-trash\"></i> Supprimer\n    </button>\n  ");
                     }
                     if (!isValidatedLocally) {
-                        popupContent += "<button class=\"validateBtn\" data-id=\"".concat(geo._id, "\" style=\"margin-top: 10px;\">Valider</button>");
+                        popupContent += "\n    <button class=\"btn btn-success validateBtn w-100 my-1\" data-id=\"".concat(geo._id, "\">\n      <i class=\"bi bi-check-circle\"></i> Valider le mdp\n    </button>\n  ");
                     }
-                    popupContent += "<button class=\"show-comments-btn\" data-id=\"".concat(geo._id, "\" style=\"margin-top: 10px;\">Voir Commentaires</button>");
+                    popupContent += "\n  <button class=\"btn btn-info show-comments-btn w-100 my-1\" data-id=\"".concat(geo._id, "\">\n    <i class=\"bi bi-chat-dots\"></i> Voir Commentaires\n  </button>\n");
                     var markerIcon = isValidatedLocally || geo.isValidated ? greenIcon : defaultIcon;
                     var marker = L.marker([geo.latitude, geo.longitude], {
                         icon: markerIcon,

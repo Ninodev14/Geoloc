@@ -193,16 +193,28 @@ const loadGeocaches = async (): Promise<void> => {
 
       if (userData && (userData.username === geo.creator || userData.isAdmin)) {
         popupContent += ` 
-          <button class="editBtn" data-id="${geo._id}" style="margin-top: 10px;">Modifier</button>
-          <button class="deleteBtn" data-id="${geo._id}" style="margin-top: 10px;">Supprimer</button>
-        `;
+    <button class="btn btn-warning editBtn w-100 my-1" data-id="${geo._id}">
+      <i class="bi bi-pencil"></i> Modifier
+    </button>
+    <button class="btn btn-danger deleteBtn w-100 my-1" data-id="${geo._id}">
+      <i class="bi bi-trash"></i> Supprimer
+    </button>
+  `;
       }
 
       if (!isValidatedLocally) {
-        popupContent += `<button class="validateBtn" data-id="${geo._id}" style="margin-top: 10px;">Valider</button>`;
+        popupContent += `
+    <button class="btn btn-success validateBtn w-100 my-1" data-id="${geo._id}">
+      <i class="bi bi-check-circle"></i> Valider le mdp
+    </button>
+  `;
       }
 
-      popupContent += `<button class="show-comments-btn" data-id="${geo._id}" style="margin-top: 10px;">Voir Commentaires</button>`;
+      popupContent += `
+  <button class="btn btn-info show-comments-btn w-100 my-1" data-id="${geo._id}">
+    <i class="bi bi-chat-dots"></i> Voir Commentaires
+  </button>
+`;
 
       const markerIcon =
         isValidatedLocally || geo.isValidated ? greenIcon : defaultIcon;
