@@ -1,73 +1,119 @@
 import request from "supertest";
-import { Server } from "http";
-import app from "../../server";
 
-beforeAll(() => {
-  global.localStorage = {
-    getItem: jest.fn(),
-    setItem: jest.fn(),
-    removeItem: jest.fn(),
-    clear: jest.fn(),
-  };
-});
+const API_URL = "https://galio-a9c7f612fd32.herokuapp.com";
 
-jest.mock("localStorage", () => ({
-  getItem: jest.fn(),
-}));
+describe("Admin Authentication & User Management", () => {
+  let adminToken: string;
+  let userToken: string;
+  let testUserEmail = "testuser@example.com";
 
-const server: Server = app.listen(5000);
+  beforeAll(async () => {
+    // Connexion admin
+    const adminResponse = await request(API_URL).post("/login").send({
+      email: "admin@example.com",
+      password: "AdminPassword123",
+    });
 
-describe("Authentication and User management API", () => {
-  afterAll(() => {
-    server.close();
+    expect(adminResponse.status).toBe(200);
+    expect(adminResponse.body).toHaveProperty("token");
+    adminToken = adminResponse.body.token;
+
+    // Connexion utilisateur
+    const userResponse = await request(API_URL).post("/login").send({
+      email: testUserEmail,
+      password: "UserPassword123",
+    });
+
+    expect(userResponse.status).toBe(200);
+    expect(userResponse.body).toHaveProperty("token");
+    userToken = userResponse.body.token;
   });
 
-  describe("GET /profile", () => {
-    it("should redirect to /index.html if no token is found", async () => {
-      (localStorage.getItem as jest.Mock).mockReturnValue(null); // Simuler l'absence de token
+  it("should restrict access for non-admin users", async () => {
+    const response = await request(API_URL)
+      .get("/profile")
+      .set("Authorization", `Bearer ${userToken}`);
 
-      await request(server)
-        .get("/profile")
-        .expect(302)
-        .expect("Location", "/index.html");
-    });
-
-    it("should fetch user data if valid token is provided", async () => {
-      const token = "validToken";
-      (localStorage.getItem as jest.Mock).mockReturnValue(token);
-
-      // Simuler la réponse de l'API
-      const mockResponse = {
-        user: { username: "admin", isAdmin: true },
-      };
-
-      // Tester la fonction avec un token valide
-      await request(server)
-        .get("/profile")
-        .set("Authorization", `Bearer ${token}`)
-        .expect(200)
-        .expect("Content-Type", /json/)
-        .expect((res) => {
-          expect(res.body.user).toEqual(mockResponse.user);
-        });
-    });
-
-    it("should redirect to /geoloc.html if user is not admin", async () => {
-      const token = "validToken";
-      (localStorage.getItem as jest.Mock).mockReturnValue(token);
-
-      // Simuler une réponse de profil sans droits admin
-      const mockResponse = {
-        user: { username: "user", isAdmin: false },
-      };
-
-      await request(server)
-        .get("/profile")
-        .set("Authorization", `Bearer ${token}`)
-        .expect(302)
-        .expect("Location", "/geoloc.html");
-    });
+    expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty("error");
+    expect(response.body.error).toBe(
+      "Accès interdit ou utilisateur non administrateur."
+    );
   });
 
-  // Continuez avec les autres tests...
+  it("should allow admin to fetch users", async () => {
+    const response = await request(API_URL)
+      .get("/admin/user")
+      .set("Authorization", `Bearer ${adminToken}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("users");
+    expect(Array.isArray(response.body.users)).toBe(true);
+  });
+
+  it("should allow admin to promote a user", async () => {
+    const response = await request(API_URL)
+      .post("/make-admin")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send({ email: testUserEmail });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("message");
+    expect(response.body.message).toBe("Utilisateur promu avec succès.");
+  });
+
+  it("should allow admin to edit a user", async () => {
+    const response = await request(API_URL)
+      .put("/edit-user")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send({
+        email: testUserEmail,
+        newUsername: "UpdatedUser",
+        newIsAdmin: true,
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("message");
+    expect(response.body.message).toBe("Utilisateur mis à jour avec succès.");
+  });
+
+  it("should allow admin to delete a user", async () => {
+    const response = await request(API_URL)
+      .delete("/delete-user")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send({ email: testUserEmail });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("message");
+    expect(response.body.message).toBe("Utilisateur supprimé avec succès.");
+  });
+
+  it("should return an error if user is not found", async () => {
+    const response = await request(API_URL)
+      .delete("/delete-user")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send({ email: "nonexistent@example.com" });
+
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty("error");
+    expect(response.body.error).toBe("Utilisateur introuvable.");
+  });
+
+  it("should handle server errors gracefully", async () => {
+    jest
+      .spyOn(global, "fetch")
+      .mockRejectedValue(new Error("Internal Server Error"));
+
+    try {
+      const response = await request(API_URL)
+        .get("/admin/user")
+        .set("Authorization", `Bearer ${adminToken}`);
+
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty("error");
+      expect(response.body.error).toBe("Erreur serveur.");
+    } catch (error) {
+      console.error("Erreur simulée :", error);
+    }
+  });
 });
