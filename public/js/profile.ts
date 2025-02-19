@@ -38,7 +38,7 @@ const fetchProfile = async () => {
         "profileImage"
       ) as HTMLImageElement | null;
       if (profileImageElement && data.user.profileImage) {
-        profileImageElement.src = data.user.profileImage;
+        profileImageElement.src = `https://galio-a9c7f612fd32.herokuapp.com/${data.user.profileImage}`;
         profileImageElement.style.display = "block";
       }
 
