@@ -8,6 +8,14 @@ const path = require("path");
 const swaggerSetup = require("./swagger");
 
 const app = express();
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+cloudinary.config({
+  cloud_name: "votre_cloud_name",
+  api_key: "votre_api_key",
+  api_secret: "votre_api_secret",
+});
 
 app.use(express.json());
 app.use(cors());
@@ -15,14 +23,15 @@ app.use(express.static("public"));
 
 swaggerSetup(app);
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public/uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "public/uploads/", // Dossier Cloudinary
+    format: async (req, file) => "png", // Format par défaut
+    public_id: (req, file) => Date.now() + "-" + file.originalname, // Nom unique
   },
 });
+
 const upload = multer({ storage: storage });
 
 const dbURI =
@@ -115,21 +124,29 @@ const User = mongoose.model("User", UserSchema);
  */
 app.post("/register", upload.single("profileImage"), async (req, res) => {
   try {
+    console.log("Données reçues :", req.body);
+    console.log("Fichier reçu :", req.file);
+
     const { username, email, password } = req.body;
-    const profileImage = req.file ? req.file.path : null;
+
+    console.log("URL de l'image téléchargée sur Cloudinary :", profileImage);
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = new User({
       username,
       email,
       password: hashedPassword,
       profileImage,
     });
+
     await newUser.save();
     res.status(201).json({ message: "Utilisateur créé avec succès" });
   } catch (error) {
+    console.error("Erreur lors de l'inscription :", error);
     res.status(500).json({ error: "Erreur lors de l'inscription" });
   }
 });
+
 /**
  * @openapi
  * /login:
@@ -193,6 +210,28 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
+app.post(
+  "/upload-profile-image",
+  authMiddleware,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const user = await User.findById(req.user.userId);
+      if (!user)
+        return res.status(404).json({ error: "Utilisateur non trouvé" });
+
+      user.profileImage = req.file.path;
+      await user.save();
+
+      res.json({
+        message: "Image mise à jour",
+        profileImage: user.profileImage,
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Erreur lors de l'upload de l'image" });
+    }
+  }
+);
 const adminMiddleware = (req, res, next) => {
   if (!req.user.isAdmin) {
     return res.status(302).redirect("/geoloc.html");
@@ -218,13 +257,12 @@ app.get("/profile", authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.user.userId);
     if (!user) return res.status(404).json({ error: "Utilisateur non trouvé" });
+
     res.json({
       user: {
         username: user.username,
         email: user.email,
-        profileImage: user.profileImage
-          ? `/uploads/${path.basename(user.profileImage)}`
-          : null,
+        profileImage: user.profileImage,
         isAdmin: user.isAdmin,
       },
     });
@@ -821,7 +859,7 @@ app.post("/validate-geocache/:id", authMiddleware, async (req, res) => {
 app.post(
   "/comment/:geocacheId",
   authMiddleware,
-  upload.single("image"),
+  upload.single("image"), // Gestion de l'upload
   async (req, res) => {
     console.log("Fichier reçu :", req.file);
     try {
@@ -837,7 +875,7 @@ app.post(
         return res.status(401).json({ error: "Utilisateur non authentifié" });
       }
 
-      const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+      const imageUrl = req.file ? req.file.path : null;
 
       const newComment = new Comment({
         text,
