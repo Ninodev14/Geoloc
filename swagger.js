@@ -21,14 +21,14 @@ const options = {
   apis: ["server.js"],
 };
 
-const specs = swaggerJsdoc(options);
+const specs = swaggerJsdoc(options); // Déplacez ceci ici pour qu'il soit défini avant d'être utilisé dans `saveDocs`
 
 const swaggerSetup = (app) => {
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 };
 
 const saveDocs = () => {
-  const docDir = path.join(__dirname, "/doc");
+  const docDir = path.join(__dirname, "/doc"); // Assurez-vous que le chemin est correct
   if (!fs.existsSync(docDir)) {
     fs.mkdirSync(docDir, { recursive: true });
   }
@@ -38,6 +38,7 @@ const saveDocs = () => {
     JSON.stringify(specs, null, 2)
   );
 
+  // Génération HTML
   const htmlContent = `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -63,6 +64,7 @@ const saveDocs = () => {
   fs.writeFileSync(path.join(docDir, "swagger.html"), htmlContent);
 };
 
+// Appelez saveDocs une seule fois pour générer les fichiers de documentation
 saveDocs();
 
 module.exports = swaggerSetup;

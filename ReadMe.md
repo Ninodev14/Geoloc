@@ -62,5 +62,3 @@ Tu souhaites contribuer à ce projet ? Voici comment :
 ## Licence
 
 Ce projet a été créé dans un cadre d'enseignement à l'IUT Bordeaux Montaigne par Nino Lefort.
-
-## Information rendu :
