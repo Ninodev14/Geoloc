@@ -77,7 +77,6 @@ var checkAuthentication = function () { return __awaiter(_this, void 0, void 0, 
                         usernameElement.textContent = data.user.username;
                     }
                     if (profileImageElement && data.user.profileImage) {
-                        console.log(data.user.profileImage);
                         profileImageElement.src = data.user.profileImage;
                     }
                 }

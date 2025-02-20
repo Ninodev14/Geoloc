@@ -44,7 +44,6 @@ const checkAuthentication = async (): Promise<void> => {
         usernameElement.textContent = data.user.username;
       }
       if (profileImageElement && data.user.profileImage) {
-        console.log(data.user.profileImage);
         profileImageElement.src = data.user.profileImage;
       }
     } else {
