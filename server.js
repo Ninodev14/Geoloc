@@ -6,6 +6,14 @@ const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const swaggerSetup = require("./swagger");
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+cloudinary.config({
+  cloud_name: "donjhiyfo",
+  api_key: "357453539163735",
+  api_secret: "zBRZfTpu-y4-u7Z9HiioKUcCKlg",
+});
 
 const app = express();
 
@@ -15,14 +23,14 @@ app.use(express.static("public"));
 
 swaggerSetup(app);
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public/uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "profile_pictures",
+    allowed_formats: ["jpg", "png", "jpeg"],
   },
 });
+
 const upload = multer({ storage: storage });
 
 const dbURI =
@@ -117,6 +125,15 @@ app.post("/register", upload.single("profileImage"), async (req, res) => {
   try {
     const { username, email, password } = req.body;
     const profileImage = req.file ? req.file.path : null;
+
+    if (!profileImage) {
+      return res.status(400).json({ error: "L'upload de l'image a échoué." });
+    }
+
+    if (!profileImage) {
+      return res.status(400).json({ error: "Aucune image reçue" });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
       username,
@@ -124,12 +141,17 @@ app.post("/register", upload.single("profileImage"), async (req, res) => {
       password: hashedPassword,
       profileImage,
     });
+
     await newUser.save();
-    res.status(201).json({ message: "Utilisateur créé avec succès" });
+    res
+      .status(201)
+      .json({ message: "Utilisateur créé avec succès", profileImage });
   } catch (error) {
+    console.error("Erreur lors de l'inscription :", error);
     res.status(500).json({ error: "Erreur lors de l'inscription" });
   }
 });
+
 /**
  * @openapi
  * /login:
