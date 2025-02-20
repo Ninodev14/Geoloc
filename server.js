@@ -857,7 +857,10 @@ app.post(
         return res.status(401).json({ error: "Utilisateur non authentifié" });
       }
 
-      const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+      // Si l'image est reçue, crée l'URL complète depuis Cloudinary
+      const imageUrl = req.file
+        ? `https://res.cloudinary.com/donjhiyfo/image/upload/v1740043997/profile_pictures/${req.file.filename}`
+        : null;
 
       const newComment = new Comment({
         text,

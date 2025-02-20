@@ -177,9 +177,9 @@ var loadComments = function () { return __awaiter(_this, void 0, void 0, functio
                 data = _a.sent();
                 commentsList.innerHTML = data.comments.length
                     ? data.comments
-                        .map(function (comment) { return " \n            <div class=\"comment\" data-id=\"".concat(comment._id, "\">\n              <p><strong>").concat(comment.creator.username || "Anonyme", "</strong>: ").concat(comment.text, "</p>\n              ").concat(comment.image
-                        ? "<img src=\"https://galiotest.osc-fr1.scalingo.io/".concat(comment.image, "\" style=\"max-width: 200px;\"/>")
-                        : "", "\n            </div>"); })
+                        .map(function (comment) { return " \n        <div class=\"comment\" data-id=\"".concat(comment._id, "\">\n          <p><strong>").concat(comment.creator.username || "Anonyme", "</strong>: ").concat(comment.text, "</p>\n          ").concat(comment.image
+                        ? "<img src=\"".concat(comment.image, "\" style=\"max-width: 200px;\"/>")
+                        : "", "\n        </div>"); })
                         .join("")
                     : "<p>Aucun commentaire.</p>";
                 return [3 /*break*/, 5];

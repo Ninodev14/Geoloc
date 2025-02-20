@@ -165,16 +165,16 @@ const loadComments = async () => {
       ? data.comments
           .map(
             (comment) => ` 
-            <div class="comment" data-id="${comment._id}">
-              <p><strong>${comment.creator.username || "Anonyme"}</strong>: ${
+        <div class="comment" data-id="${comment._id}">
+          <p><strong>${comment.creator.username || "Anonyme"}</strong>: ${
               comment.text
             }</p>
-              ${
-                comment.image
-                  ? `<img src="https://galiotest.osc-fr1.scalingo.io/${comment.image}" style="max-width: 200px;"/>`
-                  : ""
-              }
-            </div>`
+          ${
+            comment.image
+              ? `<img src="${comment.image}" style="max-width: 200px;"/>`
+              : ""
+          }
+        </div>`
           )
           .join("")
       : "<p>Aucun commentaire.</p>";
