@@ -63,10 +63,10 @@ Tu souhaites contribuer à ce projet ? Voici comment :
 
 Ce projet a été créé dans un cadre d'enseignement à l'IUT Bordeaux Montaigne par Nino Lefort.
 
-## Tchenique
+## Technique
 
-Ce preojet a était ralisez notemanet avec cloudinary pour gérer les img sur un cloud est le mango db cloud comme base de donner
+Ce projet a été réalisé notamment avec Cloudinary pour gérer les images sur un cloud et MongoDB Cloud comme base de données.
 
 Compte admin :
-jp.lesang@mmibordeaux.com
-NinoMérite20/20
+📧 jp.lesang@mmibordeaux.com
+🔑 NinoMérite20/20
