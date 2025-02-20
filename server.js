@@ -124,7 +124,7 @@ const User = mongoose.model("User", UserSchema);
 app.post("/register", upload.single("profileImage"), async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    const profileImage = req.file;
+    const profileImage = req.file ? req.file.path : null;
 
     if (!profileImage) {
       return res.status(400).json({ error: "L'upload de l'image a échoué." });
