@@ -49,7 +49,7 @@ var checkAuthentication = function () { return __awaiter(_this, void 0, void 0, 
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 4, , 5]);
-                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/profile", {
+                return [4 /*yield*/, fetch("https://galiotest.osc-fr1.scalingo.io/profile", {
                         method: "GET",
                         headers: {
                             Authorization: "Bearer ".concat(token),
@@ -78,7 +78,7 @@ var checkAuthentication = function () { return __awaiter(_this, void 0, void 0, 
     });
 }); };
 var fetchUsers = function (token) {
-    fetch("https://galio-a9c7f612fd32.herokuapp.com/admin/user", {
+    fetch("https://galiotest.osc-fr1.scalingo.io/admin/user", {
         headers: { Authorization: "Bearer ".concat(token) },
     })
         .then(function (res) { return res.json(); })
@@ -101,7 +101,7 @@ var makeAdmin = function (email) {
     var token = getToken();
     if (!token)
         return;
-    fetch("https://galio-a9c7f612fd32.herokuapp.com/make-admin", {
+    fetch("https://galiotest.osc-fr1.scalingo.io/make-admin", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -116,7 +116,7 @@ var editUser = function (email) {
     if (!newUsername)
         return;
     var token = getToken();
-    fetch("https://galio-a9c7f612fd32.herokuapp.com/edit-user", {
+    fetch("https://galiotest.osc-fr1.scalingo.io/edit-user", {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -131,7 +131,7 @@ var deleteUser = function (email) {
     var token = getToken();
     if (!token)
         return;
-    fetch("https://galio-a9c7f612fd32.herokuapp.com/delete-user", {
+    fetch("https://galiotest.osc-fr1.scalingo.io/delete-user", {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",

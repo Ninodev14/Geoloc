@@ -18,7 +18,7 @@ const fetchRankings = async (): Promise<void> => {
     }
 
     const response = await fetch(
-      "https://galio-a9c7f612fd32.herokuapp.com/rankings",
+      "https://galiotest.osc-fr1.scalingo.io/rankings",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -70,7 +70,7 @@ const displayRankings = (
 const loadMostPopularGeocache = async () => {
   try {
     const response = await fetch(
-      "https://galio-a9c7f612fd32.herokuapp.com/most-popular-geocaches"
+      "https://galiotest.osc-fr1.scalingo.io/most-popular-geocaches"
     );
 
     if (!response.ok) {

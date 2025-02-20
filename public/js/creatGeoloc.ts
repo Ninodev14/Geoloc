@@ -7,7 +7,7 @@ const getUserData = async (): Promise<void> => {
     }
 
     const response = await fetch(
-      "https://galio-a9c7f612fd32.herokuapp.com/profile",
+      "https://galiotest.osc-fr1.scalingo.io/profile",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -60,7 +60,7 @@ document
 
     try {
       const response = await fetch(
-        "https://galio-a9c7f612fd32.herokuapp.com/geocache",
+        "https://galiotest.osc-fr1.scalingo.io/geocache",
         {
           method: "POST",
           headers: {

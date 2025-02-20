@@ -7,7 +7,7 @@ const getGeocacheData = async (): Promise<void> => {
 
   try {
     const response = await fetch(
-      `https://galio-a9c7f612fd32.herokuapp.com/geocache/${geocacheId}`,
+      `https://galiotest.osc-fr1.scalingo.io/geocache/${geocacheId}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -71,7 +71,7 @@ document
 
     try {
       const response = await fetch(
-        `https://galio-a9c7f612fd32.herokuapp.com/geocache/${geocacheId}`,
+        `https://galiotest.osc-fr1.scalingo.io/geocache/${geocacheId}`,
         {
           method: "PUT",
           headers: {

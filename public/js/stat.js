@@ -46,7 +46,7 @@ var fetchRankings = function () { return __awaiter(_this, void 0, void 0, functi
                     console.error("Utilisateur non connecté.");
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/rankings", {
+                return [4 /*yield*/, fetch("https://galiotest.osc-fr1.scalingo.io/rankings", {
                         headers: {
                             Authorization: "Bearer ".concat(token),
                         },
@@ -93,7 +93,7 @@ var loadMostPopularGeocache = function () { return __awaiter(_this, void 0, void
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
-                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/most-popular-geocaches")];
+                return [4 /*yield*/, fetch("https://galiotest.osc-fr1.scalingo.io/most-popular-geocaches")];
             case 1:
                 response = _a.sent();
                 if (!response.ok) {

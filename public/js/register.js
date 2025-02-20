@@ -73,7 +73,7 @@ var _this = this;
                 _b.label = 1;
             case 1:
                 _b.trys.push([1, 4, , 5]);
-                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/register", {
+                return [4 /*yield*/, fetch("https://galiotest.osc-fr1.scalingo.io/register", {
                         method: "POST",
                         body: formData,
                     })];

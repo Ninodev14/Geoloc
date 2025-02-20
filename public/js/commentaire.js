@@ -68,7 +68,7 @@ var initializeMap = function () { return __awaiter(_this, void 0, void 0, functi
                     window.location.href = "index.html";
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/geocache/".concat(geocacheId), {
+                return [4 /*yield*/, fetch("https://galiotest.osc-fr1.scalingo.io/geocache/".concat(geocacheId), {
                         headers: {
                             Authorization: "Bearer ".concat(token),
                         },
@@ -128,7 +128,7 @@ var initializeMap = function () { return __awaiter(_this, void 0, void 0, functi
                 formData.append("text", commentText);
                 if (commentImage)
                     formData.append("image", commentImage);
-                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/comment/".concat(geocacheId), {
+                return [4 /*yield*/, fetch("https://galiotest.osc-fr1.scalingo.io/comment/".concat(geocacheId), {
                         method: "POST",
                         headers: { Authorization: "Bearer ".concat(token) },
                         body: formData,
@@ -165,7 +165,7 @@ var loadComments = function () { return __awaiter(_this, void 0, void 0, functio
                 token = localStorage.getItem("token");
                 if (!token)
                     throw new Error("Vous devez être connecté.");
-                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/comment/".concat(geocacheId), {
+                return [4 /*yield*/, fetch("https://galiotest.osc-fr1.scalingo.io/comment/".concat(geocacheId), {
                         headers: { Authorization: "Bearer ".concat(token) },
                     })];
             case 2:
@@ -178,7 +178,7 @@ var loadComments = function () { return __awaiter(_this, void 0, void 0, functio
                 commentsList.innerHTML = data.comments.length
                     ? data.comments
                         .map(function (comment) { return " \n            <div class=\"comment\" data-id=\"".concat(comment._id, "\">\n              <p><strong>").concat(comment.creator.username || "Anonyme", "</strong>: ").concat(comment.text, "</p>\n              ").concat(comment.image
-                        ? "<img src=\"https://galio-a9c7f612fd32.herokuapp.com/".concat(comment.image, "\" style=\"max-width: 200px;\"/>")
+                        ? "<img src=\"https://galiotest.osc-fr1.scalingo.io/".concat(comment.image, "\" style=\"max-width: 200px;\"/>")
                         : "", "\n            </div>"); })
                         .join("")
                     : "<p>Aucun commentaire.</p>";
@@ -205,7 +205,7 @@ var loadComments = function () { return __awaiter(_this, void 0, void 0, functio
                 currentUserId = getCurrentUserId(token);
                 if (!currentUserId)
                     throw new Error("Impossible de récupérer l'ID de l'utilisateur.");
-                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/geocache/".concat(geocacheId, "/like"), {
+                return [4 /*yield*/, fetch("https://galiotest.osc-fr1.scalingo.io/geocache/".concat(geocacheId, "/like"), {
                         method: "POST",
                         headers: {
                             Authorization: "Bearer ".concat(token),
@@ -242,7 +242,7 @@ var updateLikeCount = function () { return __awaiter(_this, void 0, void 0, func
                 token = localStorage.getItem("token");
                 if (!token)
                     throw new Error("Vous devez être connecté.");
-                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/geocache/".concat(geocacheId), {
+                return [4 /*yield*/, fetch("https://galiotest.osc-fr1.scalingo.io/geocache/".concat(geocacheId), {
                         headers: { Authorization: "Bearer ".concat(token) },
                     })];
             case 1:
@@ -274,7 +274,7 @@ var likeComment = function (commentId, btn) { return __awaiter(_this, void 0, vo
                 token = localStorage.getItem("token");
                 if (!token)
                     throw new Error("Vous devez être connecté.");
-                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/comment/".concat(commentId, "/like"), {
+                return [4 /*yield*/, fetch("https://galiotest.osc-fr1.scalingo.io/comment/".concat(commentId, "/like"), {
                         method: "POST",
                         headers: { Authorization: "Bearer ".concat(token) },
                     })];

@@ -49,7 +49,7 @@ const initializeMap = async (): Promise<void> => {
     }
 
     const response = await fetch(
-      `https://galio-a9c7f612fd32.herokuapp.com/geocache/${geocacheId}`,
+      `https://galiotest.osc-fr1.scalingo.io/geocache/${geocacheId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -119,7 +119,7 @@ document
       if (commentImage) formData.append("image", commentImage);
 
       const response = await fetch(
-        `https://galio-a9c7f612fd32.herokuapp.com/comment/${geocacheId}`,
+        `https://galiotest.osc-fr1.scalingo.io/comment/${geocacheId}`,
         {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },
@@ -151,7 +151,7 @@ const loadComments = async () => {
     if (!token) throw new Error("Vous devez être connecté.");
 
     const response = await fetch(
-      `https://galio-a9c7f612fd32.herokuapp.com/comment/${geocacheId}`,
+      `https://galiotest.osc-fr1.scalingo.io/comment/${geocacheId}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -171,7 +171,7 @@ const loadComments = async () => {
             }</p>
               ${
                 comment.image
-                  ? `<img src="https://galio-a9c7f612fd32.herokuapp.com/${comment.image}" style="max-width: 200px;"/>`
+                  ? `<img src="https://galiotest.osc-fr1.scalingo.io/${comment.image}" style="max-width: 200px;"/>`
                   : ""
               }
             </div>`
@@ -198,7 +198,7 @@ document
         throw new Error("Impossible de récupérer l'ID de l'utilisateur.");
 
       const response = await fetch(
-        `https://galio-a9c7f612fd32.herokuapp.com/geocache/${geocacheId}/like`,
+        `https://galiotest.osc-fr1.scalingo.io/geocache/${geocacheId}/like`,
         {
           method: "POST",
           headers: {
@@ -230,7 +230,7 @@ const updateLikeCount = async () => {
     if (!token) throw new Error("Vous devez être connecté.");
 
     const response = await fetch(
-      `https://galio-a9c7f612fd32.herokuapp.com/geocache/${geocacheId}`,
+      `https://galiotest.osc-fr1.scalingo.io/geocache/${geocacheId}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -255,7 +255,7 @@ const likeComment = async (commentId, btn) => {
     if (!token) throw new Error("Vous devez être connecté.");
 
     const response = await fetch(
-      `https://galio-a9c7f612fd32.herokuapp.com/comment/${commentId}/like`,
+      `https://galiotest.osc-fr1.scalingo.io/comment/${commentId}/like`,
       {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },

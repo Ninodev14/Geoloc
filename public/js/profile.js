@@ -50,7 +50,7 @@ var fetchProfile = function () { return __awaiter(_this, void 0, void 0, functio
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 4, , 5]);
-                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/profile", {
+                return [4 /*yield*/, fetch("https://galiotest.osc-fr1.scalingo.io/profile", {
                         method: "GET",
                         headers: { Authorization: "Bearer ".concat(token) },
                     })];
@@ -64,7 +64,7 @@ var fetchProfile = function () { return __awaiter(_this, void 0, void 0, functio
                     document.getElementById("email").textContent = "Email: ".concat(data.user.email || "Non disponible");
                     profileImageElement = document.getElementById("profileImage");
                     if (profileImageElement && data.user.profileImage) {
-                        profileImageElement.src = "https://galio-a9c7f612fd32.herokuapp.com/".concat(data.user.profileImage);
+                        profileImageElement.src = "https://galiotest.osc-fr1.scalingo.io/".concat(data.user.profileImage);
                         profileImageElement.style.display = "block";
                     }
                     if (data.user.isAdmin) {

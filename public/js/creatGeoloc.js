@@ -47,7 +47,7 @@ var getUserData = function () { return __awaiter(_this, void 0, void 0, function
                     console.error("Aucun token trouvé dans le localStorage.");
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/profile", {
+                return [4 /*yield*/, fetch("https://galiotest.osc-fr1.scalingo.io/profile", {
                         headers: {
                             Authorization: "Bearer ".concat(token),
                         },
@@ -94,7 +94,7 @@ getUserData();
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/geocache", {
+                return [4 /*yield*/, fetch("https://galiotest.osc-fr1.scalingo.io/geocache", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",

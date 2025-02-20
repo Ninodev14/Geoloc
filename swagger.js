@@ -5,7 +5,7 @@ const swaggerUi = require("swagger-ui-express");
 
 const serverUrl =
   process.env.NODE_ENV === "production"
-    ? "https://galio-a9c7f612fd32.herokuapp.com"
+    ? "https://galiotest.osc-fr1.scalingo.io/"
     : "http://localhost:5000";
 
 const options = {
@@ -21,14 +21,14 @@ const options = {
   apis: ["server.js"],
 };
 
-const specs = swaggerJsdoc(options); // Déplacez ceci ici pour qu'il soit défini avant d'être utilisé dans `saveDocs`
+const specs = swaggerJsdoc(options);
 
 const swaggerSetup = (app) => {
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 };
 
 const saveDocs = () => {
-  const docDir = path.join(__dirname, "/doc"); // Assurez-vous que le chemin est correct
+  const docDir = path.join(__dirname, "/doc");
   if (!fs.existsSync(docDir)) {
     fs.mkdirSync(docDir, { recursive: true });
   }
@@ -38,7 +38,6 @@ const saveDocs = () => {
     JSON.stringify(specs, null, 2)
   );
 
-  // Génération HTML
   const htmlContent = `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -64,7 +63,6 @@ const saveDocs = () => {
   fs.writeFileSync(path.join(docDir, "swagger.html"), htmlContent);
 };
 
-// Appelez saveDocs une seule fois pour générer les fichiers de documentation
 saveDocs();
 
 module.exports = swaggerSetup;

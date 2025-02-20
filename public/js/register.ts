@@ -52,7 +52,7 @@ document
 
     try {
       const response = await fetch(
-        "https://galio-a9c7f612fd32.herokuapp.com/register",
+        "https://galiotest.osc-fr1.scalingo.io/register",
         {
           method: "POST",
           body: formData,

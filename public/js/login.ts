@@ -23,7 +23,7 @@ document
 
     try {
       const response = await fetch(
-        "https://galio-a9c7f612fd32.herokuapp.com/login",
+        "https://galiotest.osc-fr1.scalingo.io/login",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

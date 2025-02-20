@@ -86,7 +86,7 @@ const getUserData = async (): Promise<void> => {
     }
 
     const response = await fetch(
-      "https://galio-a9c7f612fd32.herokuapp.com/profile",
+      "https://galiotest.osc-fr1.scalingo.io/profile",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -107,7 +107,7 @@ const getUserData = async (): Promise<void> => {
     if (userData.profileImage) {
       (
         document.getElementById("profile-image") as HTMLImageElement
-      ).src = `https://galio-a9c7f612fd32.herokuapp.com/${userData.profileImage}`;
+      ).src = `https://galiotest.osc-fr1.scalingo.io/${userData.profileImage}`;
     }
 
     loadGeocaches();
@@ -122,7 +122,7 @@ const getUserData = async (): Promise<void> => {
 const loadGeocaches = async (): Promise<void> => {
   try {
     const response = await fetch(
-      "https://galio-a9c7f612fd32.herokuapp.com/geocache"
+      "https://galiotest.osc-fr1.scalingo.io/geocache"
     );
     if (!response.ok) {
       throw new Error("Erreur lors du chargement des géocaches.");
@@ -144,7 +144,7 @@ const loadGeocaches = async (): Promise<void> => {
 
     if (token) {
       const validationResponse = await fetch(
-        "https://galio-a9c7f612fd32.herokuapp.com/validated-geocaches",
+        "https://galiotest.osc-fr1.scalingo.io/validated-geocaches",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -262,7 +262,7 @@ const loadGeocaches = async (): Promise<void> => {
             if (confirmed) {
               const token = localStorage.getItem("token");
               await fetch(
-                `https://galio-a9c7f612fd32.herokuapp.com/geocache/${geo._id}`,
+                `https://galiotest.osc-fr1.scalingo.io/geocache/${geo._id}`,
                 {
                   method: "DELETE",
                   headers: { Authorization: `Bearer ${token}` },
@@ -290,7 +290,7 @@ const validateGeocache = async (geocacheId, code, marker) => {
   try {
     const token = localStorage.getItem("token");
     const response = await fetch(
-      `https://galio-a9c7f612fd32.herokuapp.com/validate-geocache/${geocacheId}`,
+      `https://galiotest.osc-fr1.scalingo.io/validate-geocache/${geocacheId}`,
       {
         method: "POST",
         headers: {
@@ -345,7 +345,7 @@ const loadComments = async (geocacheId: string) => {
   if (!commentsList) return;
 
   const response = await fetch(
-    `https://galio-a9c7f612fd32.herokuapp.com/comment/${geocacheId}`
+    `https://galiotest.osc-fr1.scalingo.io/comment/${geocacheId}`
   );
   const data = await response.json();
 
@@ -370,7 +370,7 @@ document
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-      "https://galio-a9c7f612fd32.herokuapp.com/comment",
+      "https://galiotest.osc-fr1.scalingo.io/comment",
       {
         method: "POST",
         headers: {

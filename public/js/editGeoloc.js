@@ -49,7 +49,7 @@ var getGeocacheData = function () { return __awaiter(_this, void 0, void 0, func
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 4, , 5]);
-                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/geocache/".concat(geocacheId), {
+                return [4 /*yield*/, fetch("https://galiotest.osc-fr1.scalingo.io/geocache/".concat(geocacheId), {
                         headers: {
                             Authorization: "Bearer ".concat(localStorage.getItem("token")),
                         },
@@ -108,7 +108,7 @@ getGeocacheData();
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, fetch("https://galio-a9c7f612fd32.herokuapp.com/geocache/".concat(geocacheId), {
+                return [4 /*yield*/, fetch("https://galiotest.osc-fr1.scalingo.io/geocache/".concat(geocacheId), {
                         method: "PUT",
                         headers: {
                             "Content-Type": "application/json",

@@ -20,7 +20,7 @@ const checkAuthentication = async (): Promise<void> => {
 
   try {
     const response: Response = await fetch(
-      "https://galio-a9c7f612fd32.herokuapp.com/profile",
+      "https://galiotest.osc-fr1.scalingo.io/profile",
       {
         method: "GET",
         headers: {
@@ -45,7 +45,7 @@ const checkAuthentication = async (): Promise<void> => {
       }
       if (profileImageElement && data.user.profileImage) {
         console.log(data.user.profileImage);
-        profileImageElement.src = `https://galio-a9c7f612fd32.herokuapp.com/${data.user.profileImage}`;
+        profileImageElement.src = `https://galiotest.osc-fr1.scalingo.io/${data.user.profileImage}`;
       }
     } else {
       console.error("Erreur lors de la récupération du profil :", data.error);

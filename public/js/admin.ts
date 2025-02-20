@@ -9,7 +9,7 @@ const checkAuthentication = async (): Promise<void> => {
 
   try {
     const response: Response = await fetch(
-      "https://galio-a9c7f612fd32.herokuapp.com/profile",
+      "https://galiotest.osc-fr1.scalingo.io/profile",
       {
         method: "GET",
         headers: {
@@ -36,7 +36,7 @@ const checkAuthentication = async (): Promise<void> => {
 };
 
 const fetchUsers = (token: string) => {
-  fetch("https://galio-a9c7f612fd32.herokuapp.com/admin/user", {
+  fetch("https://galiotest.osc-fr1.scalingo.io/admin/user", {
     headers: { Authorization: `Bearer ${token}` },
   })
     .then((res) => res.json())
@@ -82,7 +82,7 @@ const makeAdmin = (email) => {
   const token = getToken();
   if (!token) return;
 
-  fetch("https://galio-a9c7f612fd32.herokuapp.com/make-admin", {
+  fetch("https://galiotest.osc-fr1.scalingo.io/make-admin", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -98,7 +98,7 @@ const editUser = (email) => {
   if (!newUsername) return;
 
   const token = getToken();
-  fetch("https://galio-a9c7f612fd32.herokuapp.com/edit-user", {
+  fetch("https://galiotest.osc-fr1.scalingo.io/edit-user", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -114,7 +114,7 @@ const deleteUser = (email) => {
   const token = getToken();
   if (!token) return;
 
-  fetch("https://galio-a9c7f612fd32.herokuapp.com/delete-user", {
+  fetch("https://galiotest.osc-fr1.scalingo.io/delete-user", {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
