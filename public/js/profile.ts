@@ -38,7 +38,7 @@ const fetchProfile = async () => {
         "profileImage"
       ) as HTMLImageElement | null;
       if (profileImageElement && data.user.profileImage) {
-        profileImageElement.src = `https://galiotest.osc-fr1.scalingo.io/${data.user.profileImage}`;
+        profileImageElement.src = data.user.profileImage;
         profileImageElement.style.display = "block";
       }
 
