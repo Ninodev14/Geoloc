@@ -78,7 +78,7 @@ var checkAuthentication = function () { return __awaiter(_this, void 0, void 0, 
                     }
                     if (profileImageElement && data.user.profileImage) {
                         console.log(data.user.profileImage);
-                        profileImageElement.src = "https://galiotest.osc-fr1.scalingo.io/".concat(data.user.profileImage);
+                        profileImageElement.src = data.user.profileImage;
                     }
                 }
                 else {

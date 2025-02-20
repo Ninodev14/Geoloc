@@ -45,7 +45,7 @@ const checkAuthentication = async (): Promise<void> => {
       }
       if (profileImageElement && data.user.profileImage) {
         console.log(data.user.profileImage);
-        profileImageElement.src = `https://galiotest.osc-fr1.scalingo.io/${data.user.profileImage}`;
+        profileImageElement.src = data.user.profileImage;
       }
     } else {
       console.error("Erreur lors de la récupération du profil :", data.error);

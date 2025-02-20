@@ -244,9 +244,7 @@ app.get("/profile", authMiddleware, async (req, res) => {
       user: {
         username: user.username,
         email: user.email,
-        profileImage: user.profileImage
-          ? `/uploads/${path.basename(user.profileImage)}`
-          : null,
+        profileImage: user.profileImage || null,
         isAdmin: user.isAdmin,
       },
     });
