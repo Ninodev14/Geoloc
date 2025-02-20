@@ -837,7 +837,6 @@ app.post("/validate-geocache/:id", authMiddleware, async (req, res) => {
  *       500:
  *         description: Erreur lors de l'ajout du commentaire
  */
-
 app.post(
   "/comment/:geocacheId",
   authMiddleware,
@@ -857,10 +856,7 @@ app.post(
         return res.status(401).json({ error: "Utilisateur non authentifié" });
       }
 
-      // Si l'image est reçue, crée l'URL complète depuis Cloudinary
-      const imageUrl = req.file
-        ? `https://res.cloudinary.com/donjhiyfo/image/upload/v1740043997/profile_pictures/${req.file.filename}`
-        : null;
+      const imageUrl = req.file ? req.file.path : null;
 
       const newComment = new Comment({
         text,
